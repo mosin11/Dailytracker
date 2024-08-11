@@ -1,0 +1,9 @@
+/* custom.css */
+.signup-container {
+    margin-top: 100px !important;
+  }
+  .is-invalid {
+    border: 2px solid #dc3545 !important; 
+   
+  }
+  

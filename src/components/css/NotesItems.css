@@ -1,0 +1,52 @@
+.card {
+    border: 1px solid #dee2e6; /* Light border color */
+    border-radius: 0.25rem; /* Rounded corners */
+    overflow: hidden; /* Ensure no overflow outside the card */
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card-header {
+    background-color: #f8f9fa; /* Light background color */
+    padding: 0.75rem 1.25rem; /* Padding for the header */
+    font-weight: bold;
+  }
+  
+  .card-body {
+    padding: 1.25rem; /* Padding for the body */
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  
+  .text-truncate {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  
+  .card-text {
+    margin-bottom: 1rem; /* Spacing below the text */
+    transition: max-height 0.3s ease; /* Smooth transition for expanding/collapsing */
+  }
+  
+  .card-body .btn-link {
+    color: #007bff; /* Link color */
+    font-size: 0.875rem; /* Smaller font size for button text */
+    text-decoration: none; /* Remove underline from the button */
+  }
+  
+  .card-body .btn-link:hover {
+    text-decoration: underline; /* Underline on hover */
+  }
+  
+  .card-body .btn-link:focus {
+    outline: none; /* Remove default focus outline */
+  }
+  
+  /* Styling for cards in a grid layout */
+  .row-cols-md-3 .col {
+    display: flex;
+    align-items: stretch;
+  }
+  
