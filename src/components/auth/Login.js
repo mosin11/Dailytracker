@@ -2,9 +2,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {submitLogin} from './Auth'
-import bcrypt from 'bcryptjs';
 
-const Login = ({ setMessageType,showMessage }) => {
+
+const Login = ({ setMessageType,showMessage,setIsAuthenticated }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -19,10 +19,8 @@ const Login = ({ setMessageType,showMessage }) => {
       return;
     }
  
-   const responce = await submitLogin({email,password});
+   const responce = await submitLogin({showMessage ,setIsAuthenticated,setMessageType,email,navigate,password});
     console.log("login responce",responce);
-    showMessage('Login successfull!');
-    setMessageType('success');
     console.log('Email:', email);
     console.log('Password:', password);
   };

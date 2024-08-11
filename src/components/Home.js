@@ -4,9 +4,8 @@ import Login from './auth/Login'
 
 export default function Home() {
   return (
-    <div>
-      <Login/>
-     
+    <div className='container'>
+     <span>this is home page</span>
     </div>
   )
 }

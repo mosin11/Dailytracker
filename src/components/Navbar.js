@@ -1,13 +1,23 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import './css/Navbar.css';
 import logo from './img/logo-512.jpeg';
 
-export default function Navbar() {
+
+export default function Navbar({setIsAuthenticated}) {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    // Clear authentication token or state here
+    localStorage.removeItem('authToken'); // Example for removing token
+    // Redirect to login page
+    setIsAuthenticated(false);
+    navigate('/login');
+
+  };
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div className="container-fluid">
-        <NavLink className="navbar-brand" to="/">
+        <NavLink className="navbar-brand" to="/home">
           <img
             src={logo}
             alt="Daily Tracker Logo"
@@ -32,27 +42,27 @@ export default function Navbar() {
               <NavLink
                 className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
                 aria-current="page"
-                to="/" > Home
+                to="/home" > Home
               </NavLink>
             </li>
             <li className="nav-item">
               <NavLink
                 className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
-                to="addNotes">
+                to="/addNotes">
                 Add Notes
               </NavLink>
             </li>
             <li className="nav-item">
               <NavLink
                 className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
-                to="getNotes">
+                to="/getNotes">
                 Your Notes
               </NavLink>
             </li>
             <li className="nav-item">
               <NavLink
                 className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
-                to="addPlan"
+                to="/addPlan"
               >
                 Add Plan
               </NavLink>             
@@ -60,7 +70,7 @@ export default function Navbar() {
             <li className="nav-item">
               <NavLink
                 className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
-                to="yourplan"
+                to="/yourplan"
               >
                 Your Plan
               </NavLink>
@@ -70,6 +80,13 @@ export default function Navbar() {
             <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
             <button className="btn btn-outline-success" type="submit">Search</button>
           </form>
+          <button
+            className="btn btn-outline-light ms-2"
+            onClick={handleLogout}
+            aria-label="Logout"
+          >
+            <i className="bi bi-box-arrow-right"></i> {/* Bootstrap icon */}
+          </button>
         </div>
       </div>
     </nav>

@@ -2,8 +2,10 @@
   import axios from 'axios';
   import bcrypt from 'bcryptjs';
 
-  export async function submitSignUp({ formData, showMessage, setMessageType }) {
+
+  export async function submitSignUp({ formData,setIsAuthenticated, showMessage, navigate, setMessageType }) {
     try {
+  
       const BASE_URL = process.env.REACT_APP_API_BASE_URL;
     
       const { name, email, password, phoneNumber } = formData;
@@ -21,18 +23,21 @@
         password :encreptPswd,
         phoneNumber
       });
-
+      console.log("response",response)
+      navigate('/login');
       showMessage('Sign-up successful!');
       setMessageType('success');
+      setIsAuthenticated(true);
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || 'Error occurred';
       console.error('Error details:', error.response?.data);
       showMessage(`Error signing up: ${errorMessage}`);
       setMessageType('error');
+      setIsAuthenticated(false);
     }
   }
 
-  export async function submitLogin({ email,password, showMessage, setMessageType }) {
+  export async function submitLogin({ email,password,setIsAuthenticated, navigate,showMessage, setMessageType }) {
     try {
       const BASE_URL = process.env.REACT_APP_API_BASE_URL;
       const url = `${BASE_URL}/users/auth/login`;
@@ -46,13 +51,16 @@
         password
       });
       console.log("response",response)
+      navigate('/home');
       showMessage('Login successful!');
       setMessageType('success');
+      setIsAuthenticated(true);
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || 'Error occurred';
       console.error('Error details:', error.response?.data);
       showMessage(`Error Login: ${errorMessage}`);
       setMessageType('error');
+      setIsAuthenticated(false);
     }
   }
 

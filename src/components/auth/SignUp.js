@@ -5,7 +5,7 @@ import {submitSignUp} from './Auth'
 
 
 
-const Signup = ({ setMessageType, showMessage }) => {
+const Signup = ({ setMessageType, showMessage,setIsAuthenticated }) => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -104,11 +104,7 @@ const Signup = ({ setMessageType, showMessage }) => {
 
         if (Object.keys(newErrors).length === 0) {
             
-           await submitSignUp({formData ,showMessage,setMessageType});
-           
-            setTimeout(() => {
-                navigate('/login');
-            }, 2000);
+           await submitSignUp({formData ,showMessage,navigate,setIsAuthenticated,setMessageType});       
         } else {
             setErrors(newErrors);
             showMessage(newErrors);
