@@ -12,6 +12,8 @@ import AlertMessage from './components/AlertMessage'
 import Login from './components/auth/Login';
 import Signup from './components/auth/SignUp';
 import logo from './components/img/logo-512.jpeg'
+import ForgotPassword from './components/auth/ForgotPassword';
+import ResetPassword from './components/auth/ResetPassword';
 
 
 function App() {
@@ -54,12 +56,14 @@ function App() {
       {/* Render only the login and signup routes when not authenticated */}
       <Route path="/login" element={<Login setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} />} />
       <Route path="/signup" element={<Signup setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} />} />
+      <Route path="/forgot-password" element={<ForgotPassword setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} />} />
+      <Route path="/reset-password/:token" element={<ResetPassword setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} />} />
 
       {/* Default route should redirect to login if not authenticated */}
       <Route path="/dailytracker" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
         
       {/* Protect all other routes */}
-      <Route path="/home" element={<PrivateRoute element={<Home />} />} />
+      <Route path="/" element={<PrivateRoute element={<Home />} />} />
       <Route path="/addNotes" element={<PrivateRoute element={<AddNotes setMessageType={setMessageType} showMessage={showMessage} />} />} />
       <Route path="/yourplan" element={<PrivateRoute element={<YourPlan setMessageType={setMessageType} showMessage={showMessage} />} />} />
       <Route path="/getNotes" element={<PrivateRoute element={<YourNotes setMessageType={setMessageType} showMessage={showMessage} />} />} />

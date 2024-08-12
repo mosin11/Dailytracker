@@ -127,10 +127,10 @@ const Signup = ({ setMessageType, showMessage,setIsAuthenticated }) => {
 
     return (
         <div className="container d-flex justify-content-center my-3 align-items-center signup-container mt-5">
-            <div className="card p-4 shadow-lg" style={{ background: 'linear-gradient(to right, #ff7e5f, #feb47b)', maxWidth: '400px', width: '100%' }}>
+            <div className="card p-4 shadow-lg" style={{ background: 'linear-gradient(to right, #ff7e5f, #feb47b)', marginTop:"5%", maxWidth: '400px', width: '100%' }}>
                 <h2 className="text-center mb-4">Signup</h2>
                 <form onSubmit={handleSubmit}>
-                    <div className="mb-3">
+                    <div className="my-3">
                         <label htmlFor="name" className="form-label">Name</label>
                         <input
                             id="name"
@@ -143,7 +143,7 @@ const Signup = ({ setMessageType, showMessage,setIsAuthenticated }) => {
                         />
                         {errors.name && <div className="invalid-feedback">{errors.name}</div>}
                     </div>
-                    <div className="mb-3">
+                    <div className="my-3">
                         <label htmlFor="phoneNumber" className="form-label">Phone Number</label>
                         <input
                             id="phoneNumber"
@@ -157,7 +157,7 @@ const Signup = ({ setMessageType, showMessage,setIsAuthenticated }) => {
                         />
                         {errors.phoneNumber && <div className="invalid-feedback">{errors.phoneNumber}</div>}
                     </div>
-                    <div className="mb-3">
+                    <div className="my-3">
                         <label htmlFor="email" className="form-label">Email</label>
                         <input
                             id="email"
@@ -170,7 +170,7 @@ const Signup = ({ setMessageType, showMessage,setIsAuthenticated }) => {
                         />
                         {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                     </div>
-                    <div className="mb-3">
+                    <div className="my-3">
                         <label htmlFor="password" className="form-label">Password</label>
                         <input
                             id="password"
@@ -211,7 +211,7 @@ const Signup = ({ setMessageType, showMessage,setIsAuthenticated }) => {
                             Password Strength: {passwordStrength}
                         </small>
                     </div>
-                    <div className="mb-3">
+                    <div className="my-3">
                         <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
                         <input
                             id="confirmPassword"
@@ -230,10 +230,10 @@ const Signup = ({ setMessageType, showMessage,setIsAuthenticated }) => {
                             </small>
                         }
                     </div>
-                    <button type="submit" className="btn btn-primary mx-3 mb-2">
+                    <button type="submit" className="btn btn-primary mx-3 my-2">
                         Signup
                     </button>
-                    <button type="button" className="btn btn-secondary mx-3 mb-2" onClick={handleClear}>
+                    <button type="button" className="btn btn-secondary mx-3 my-2" onClick={handleClear}>
                         Clear
                     </button>
                     <div className="my-3 text-center">
