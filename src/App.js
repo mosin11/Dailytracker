@@ -60,7 +60,7 @@ function App() {
       <Route path="/reset-password/:token" element={<ResetPassword setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} />} />
 
       {/* Default route should redirect to login if not authenticated */}
-      <Route path="/dailytracker" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
+      <Route path="/Dailytracker" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
         
       {/* Protect all other routes */}
       <Route path="/" element={<PrivateRoute element={<Home />} />} />
