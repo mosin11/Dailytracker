@@ -29,7 +29,7 @@ const ResetPassword = ({ setMessageType, showMessage }) => {
       setIsLoading(true);
       const response = await axios.post(`${BASE_URL}/users/reset-password/${token}`, { password });
 debugger
-      if (response.statusText === "OK") {
+      if (response.status === 200) {
         showMessage('Password has been reset successfully');
         setMessageType('success');
         setTimeout(() => {

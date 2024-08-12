@@ -19,7 +19,7 @@ const ForgotPassword = ({ setMessageType, showMessage }) => {
       // Replace '/api/users/forgot-password' with the actual endpoint of your backend
       const response = await axios.post(`${BASE_URL}/users/forgot-password`, { email });
 debugger
-      if (response.statusText === "OK") {
+      if (response.status === 200) {
         showMessage('Password reset link has been sent to your email');
         setMessageType('success');
         setTimeout(() => {
