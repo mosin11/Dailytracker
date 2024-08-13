@@ -37,7 +37,7 @@ function App() {
 
   return (
 
-    <Router>
+    <Router basename="/Dailytracker">
      {!isAuthenticated && (
         <div className="bg-primary text-white p-2 rounded border border-white" style={{ position: 'absolute', top: '10px', left: '10px', display: 'flex', alignItems: 'center' }}>
           <img src={logo} alt="Logo" style={{ height: '50px', marginRight: '10px' }} />
@@ -50,15 +50,19 @@ function App() {
     <Routes>
       {/* Render only the login and signup routes when not authenticated */}
       <Route path="/login" element={<Login setUserName={setUserName} setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} />} />
+      <Route path="Dailytracker/login" element={<Login setUserName={setUserName} setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} />} />
       <Route path="/signup" element={<Signup setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} />} />
       <Route path="/forgot-password" element={<ForgotPassword setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} />} />
       <Route path="/reset-password/:token" element={<ResetPassword setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} />} />
       
-      {/* wildcard route */}
-      <Route path="*" element={<Navigate to={isAuthenticated ? "/home" : "/login"} />} />
+      {/* wildcard route
+      <Route path="*" element={<Navigate to={isAuthenticated ? "/home" : "/login"} />} /> 
+      */}
 
       {/* Default route should redirect to login if not authenticated */}
-      <Route path="/Dailytracker" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
+      <Route path="/Dailytracker/" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
+         {/* Default route should redirect to login if not authenticated */}
+      <Route path="/dailytracker" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
         
       {/* Protect all other routes */}
       <Route path="/" element={<PrivateRoute element={<Home setMessageType={setMessageType} showMessage={showMessage}/>} />} />
