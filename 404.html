@@ -10,7 +10,7 @@
             font-family: Arial, sans-serif;
             text-align: center;
             padding: 50px;
-            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             color: #333;
             height: 100vh;
             margin: 0;
@@ -18,27 +18,37 @@
             justify-content: center;
             align-items: center;
         }
+        .container {
+            max-width: 600px;
+            background: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
         h1 {
-            font-size: 3em;
+            font-size: 2.5em;
             margin-bottom: 20px;
+            color: #dc3545; /* Bootstrap danger color for emphasis */
         }
         p {
             font-size: 1.2em;
+            margin-bottom: 30px;
         }
-        a {
-            color: #007bff;
-            text-decoration: none;
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
         }
-        a:hover {
-            text-decoration: underline;
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
         }
     </style>
 </head>
 <body>
-    <div>
-        <h1>404 - Page Not Found</h1>
-        <p>Sorry, the page you are looking for does not exist.</p>
-        <p><a href="/Dailytracker">Go to Homepage</a></p>
+    <div class="container">
+        <h1>Something Went Wrong</h1>
+        <p>We couldn’t find the page you’re looking for. It may have been moved or deleted.</p>
+        <p><a class="btn btn-primary" href="/Dailytracker">Go to Homepage</a></p>
     </div>
 </body>
 </html>
