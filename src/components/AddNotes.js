@@ -7,6 +7,7 @@ import EditNoteModal from './EditNoteModal';
 export default function AddNotes({ setMessageType,showMessage }) {
     // State for adding a new note
     const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+    const token = localStorage.getItem('authToken');
     const [addTitle, setAddTitle] = useState('');
     const [addDesc, setAddDesc] = useState('');
     const [addCategory, setAddCategory] = useState('-1');
@@ -27,6 +28,11 @@ export default function AddNotes({ setMessageType,showMessage }) {
                 title: addTitle,
                 description: addDesc,
                 category: addCategory
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`, 
+                    'Content-Type': 'application/json',
+                }
             });
             // Clear the add note form after submission
             setAddTitle('');
@@ -54,7 +60,12 @@ export default function AddNotes({ setMessageType,showMessage }) {
     const fetchNotes = async () => {
         try {
            
-            const response = await axios.get(`${BASE_URL}/notes/getAllNotes`);
+            const response = await axios.get(`${BASE_URL}/notes/getAllNotes`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
+            });
             if (Array.isArray(response.data)) {           
                 setNotes(response.data);
             } else {
@@ -66,6 +77,7 @@ export default function AddNotes({ setMessageType,showMessage }) {
     };
 
     useEffect(() => {
+        console.log('useEffect called fetchNotes()');
         fetchNotes();
     }, []);
 
@@ -92,6 +104,11 @@ export default function AddNotes({ setMessageType,showMessage }) {
                 description: description,
                 category: category,
                 date: timestamp
+            },{
+                headers: {
+                    'Authorization': `Bearer ${token}`, 
+                    'Content-Type': 'application/json',
+                }
             });
             setEditingNote(null);
             setEditTitle('');
@@ -110,7 +127,12 @@ export default function AddNotes({ setMessageType,showMessage }) {
     // Function to handle deleting a note
     const deleteNotes = async (id) => {
         try {
-            await axios.delete(`${BASE_URL}/notes/deleteNote/${id}`);
+            await axios.delete(`${BASE_URL}/notes/deleteNote/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
+            });
             fetchNotes();
             showMessage('Note deleted successfully!');           
             setMessageType('delete');

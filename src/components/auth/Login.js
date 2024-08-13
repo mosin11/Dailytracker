@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { submitLogin } from './Auth'
 
 
-const Login = ({ setMessageType, showMessage, setIsAuthenticated }) => {
+const Login = ({ setMessageType, showMessage, setUserName,setIsAuthenticated }) => {
       const [email, setEmail] = useState('');
       const [password, setPassword] = useState('');
       const [showPassword, setShowPassword] = useState(false);
@@ -19,10 +19,8 @@ const Login = ({ setMessageType, showMessage, setIsAuthenticated }) => {
           return;
         }
 
-        const responce = await submitLogin({ showMessage, setIsAuthenticated, setMessageType, email, navigate, password });
-        console.log("login responce", responce);
-        console.log('Email:', email);
-        console.log('Password:', password);
+       await submitLogin({ showMessage, setUserName,setIsAuthenticated, setMessageType, email, navigate, password });
+  
       };
 
       const handleClear = () => {

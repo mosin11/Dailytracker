@@ -4,11 +4,12 @@ import './css/Navbar.css';
 import logo from './img/logo-512.jpeg';
 
 
-export default function Navbar({setIsAuthenticated}) {
+export default function Navbar({ setIsAuthenticated, userName }) {
   const navigate = useNavigate();
+
   const handleLogout = () => {
-    // Clear authentication token or state here
-    localStorage.removeItem('authToken'); // Example for removing token
+
+    localStorage.removeItem('authToken');
     // Redirect to login page
     setIsAuthenticated(false);
     navigate('/login');
@@ -65,7 +66,7 @@ export default function Navbar({setIsAuthenticated}) {
                 to="/addPlan"
               >
                 Add Plan
-              </NavLink>             
+              </NavLink>
             </li>
             <li className="nav-item">
               <NavLink
@@ -80,12 +81,15 @@ export default function Navbar({setIsAuthenticated}) {
             <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
             <button className="btn btn-outline-success" type="submit">Search</button>
           </form>
+          <div className="ms-3 text-light">
+            Welcome, {userName}
+          </div>
           <button
             className="btn btn-outline-light ms-2"
             onClick={handleLogout}
             aria-label="Logout"
           >
-            <i className="bi bi-box-arrow-right"></i> {/* Bootstrap icon */}
+            <i className="bi bi-box-arrow-right"></i>
           </button>
         </div>
       </div>

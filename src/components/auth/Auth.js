@@ -37,24 +37,23 @@
     }
   }
 
-  export async function submitLogin({ email,password,setIsAuthenticated, navigate,showMessage, setMessageType }) {
+  export async function submitLogin({ email,setUserName,password,setIsAuthenticated, navigate,showMessage, setMessageType }) {
     try {
       const BASE_URL = process.env.REACT_APP_API_BASE_URL;
       const url = `${BASE_URL}/users/auth/login`;
       
-      // Hash the password using bcrypt
-      // const salt = await bcrypt.genSalt(10);
-      // const encreptPswd = await bcrypt.hash(password, salt);
-      console.log("password,email",password,email)
+  
       const response = await axios.post(url,{
         email,
         password
       });
-      console.log("response",response)
+      console.log("response.data.token",response.data.user.name)
       navigate('/home');
       showMessage('Login successful!');
       setMessageType('success');
+      setUserName(response.data.user.name);
       setIsAuthenticated(true);
+      localStorage.setItem("authToken",response.data.token);
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || 'Error occurred';
       console.error('Error details:', error.response?.data);
