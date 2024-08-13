@@ -60,7 +60,7 @@ function App() {
       */}
 
       {/* Default route should redirect to login if not authenticated */}
-      <Route path="/Dailytracker/" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
+      <Route path="/Dailytracker" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
          {/* Default route should redirect to login if not authenticated */}
       <Route path="/dailytracker" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
         
