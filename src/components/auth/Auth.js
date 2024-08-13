@@ -3,6 +3,7 @@
   import bcrypt from 'bcryptjs';
 
 
+
   export async function submitSignUp({ formData,setIsAuthenticated, showMessage, navigate, setMessageType }) {
     try {
   
@@ -62,6 +63,35 @@
       setIsAuthenticated(false);
     }
   }
+
+  export async function authToken({ token,setMessageType,
+    showMessage}) {
+    // Now you can access token, setIsAuthenticated, etc., directly
+   
+    try {
+      const BASE_URL = process.env.REACT_APP_API_BASE_URL; 
+      const url = `${BASE_URL}/users/auth/authToken`;
+      
+      const response = await axios.get(url, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        }
+    });
+     
+      return response.data.userId
+  
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || error.message || 'Error occurred';
+      console.error('Error details:', error.response?.data);
+      localStorage.removeItem('authToken'); 
+      showMessage(`Error signing up: ${errorMessage}`);
+      setMessageType('error');
+     
+     return null;
+    }
+  }
+  
 
 
 

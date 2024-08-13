@@ -1,7 +1,7 @@
 // Login.js
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
-import { submitLogin } from './Auth'
+import { submitLogin, authToken } from './Auth'
 
 
 const Login = ({ setMessageType, showMessage, setUserName,setIsAuthenticated }) => {
@@ -10,6 +10,7 @@ const Login = ({ setMessageType, showMessage, setUserName,setIsAuthenticated }) 
       const [showPassword, setShowPassword] = useState(false);
       const [error, setError] = useState('');
       const navigate = useNavigate();
+      const token = localStorage.getItem('authToken');
 
       const handleSubmit = async (e) => {
         e.preventDefault();
@@ -39,6 +40,40 @@ const Login = ({ setMessageType, showMessage, setUserName,setIsAuthenticated }) 
         navigate('/forgot-password');
       };
 
+      
+  useEffect(() => {
+    // Define an async function inside useEffect
+    async function fetchData() {
+      
+      if (token && token !== null) {
+        const loginData = {
+          token,
+          setMessageType,
+           showMessage
+        };
+  
+        try {
+          const userId = await authToken(loginData);
+          
+          // Assuming `authToken` returns a userId or some form of validation result
+          if (userId) {
+            setIsAuthenticated(true);
+            navigate('/home');
+          } else {
+            setIsAuthenticated(false);           
+            localStorage.removeItem("authToken")
+          }
+        } catch (error) {
+          console.error('Error during authentication:', error);
+          // Optionally handle the error, e.g., show a message to the user
+          setIsAuthenticated(false);
+        }
+      }
+    }
+  
+    // Call the async function
+    fetchData();
+  }, [token]);
 
   return (
     <div className="container d-flex justify-content-center align-items-center min-vh-100">

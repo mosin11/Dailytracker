@@ -24,20 +24,14 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userName, setUserName] = useState('');
 
+
   const showMessage = (msg) => {
     setMessage(msg);
     setVisible(true);
     setTimeout(() => setVisible(false), 5000); // Hide after 3 second
   };
 
-  useEffect(() => {
-    // You can replace this with your actual authentication check
-    const token = localStorage.getItem('authToken');
-    setIsAuthenticated(!!token);
-  }, []);
-
-
-  const PrivateRoute = ({ element }) => {
+  const PrivateRoute = ({ element }) => {    
     return isAuthenticated ? element : <Navigate to="/login" />;
   };
 
@@ -59,6 +53,9 @@ function App() {
       <Route path="/signup" element={<Signup setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} />} />
       <Route path="/forgot-password" element={<ForgotPassword setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} />} />
       <Route path="/reset-password/:token" element={<ResetPassword setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} />} />
+      
+      {/* wildcard route */}
+      <Route path="*" element={<Navigate to={isAuthenticated ? "/home" : "/login"} />} />
 
       {/* Default route should redirect to login if not authenticated */}
       <Route path="/Dailytracker" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
