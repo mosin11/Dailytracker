@@ -24,6 +24,8 @@ const CallComponent = ({ showMessage }) => {
 
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const PORT = process.env.REACT_APP_PORT;
+  const hostPath = process.env.REACT_APP_API_BASE_URL_PEER;
+  
 
 
 
@@ -59,10 +61,10 @@ const CallComponent = ({ showMessage }) => {
     console.log("vedio id",id, "PORT",PORT)
     // Initialize PeerJS
     peerRef.current = new Peer(id, {
-      host: 'localhost',
-      port: PORT,
+      host: hostPath,
+      //port: PORT,   // this only can use in localhost
       path: '/api/videocalls/userId',
-      secure: false,
+      secure: true, //false for localhost
     });
 
     peerRef.current.on('open', (id) => {
@@ -133,7 +135,7 @@ const CallComponent = ({ showMessage }) => {
     }
   };
 
-  const formatPeerId = (id) => {debugger
+  const formatPeerId = (id) => {
     if (!id) return '';
     // Split the ID into chunks of 4 characters and join with '-'
     const formattedId = id.match(/.{1,4}/g).join('-');
