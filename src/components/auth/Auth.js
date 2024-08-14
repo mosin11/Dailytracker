@@ -79,7 +79,6 @@
             'Content-Type': 'application/json',
         }
     });
-     debugger
       return {userId: response.data.userId, 
               isVerified: response.data.isVerified,
               userName: response.data.userName}

@@ -14,6 +14,7 @@ import Signup from './components/auth/SignUp';
 import logo from './components/img/logo-512.jpeg'
 import ForgotPassword from './components/auth/ForgotPassword';
 import ResetPassword from './components/auth/ResetPassword';
+import CallComponent from './components/videoCall/CallComponent';
 
 
 function App() {
@@ -71,6 +72,7 @@ function App() {
       <Route path="/yourplan" element={<PrivateRoute element={<YourPlan setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
       <Route path="/getNotes" element={<PrivateRoute element={<YourNotes setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
       <Route path="/addPlan" element={<PrivateRoute element={<AddPlan setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
+      <Route path="/video-call" element={<PrivateRoute element={<CallComponent setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
     </Routes>
   </Router>
   );

@@ -76,6 +76,18 @@ export default function Navbar({ setIsAuthenticated, userName }) {
                 Your Plan
               </NavLink>
             </li>
+
+
+            <li className="nav-item">
+              <NavLink
+                className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
+                to="/video-call"
+              >
+                <i className="bi bi-telephone"></i>
+                <span className="mx-2">/</span>
+                <i className="bi bi-camera-video"></i>
+              </NavLink>
+            </li>
           </ul>
           <form className="d-flex">
             <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />

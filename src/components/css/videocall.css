@@ -1,0 +1,51 @@
+.peer-id-container {
+    text-align: center;
+    margin: 20px 0; /* Space around the container */
+  }
+  
+  .peer-id-boxes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .peer-id-box {
+    font-weight: bold;
+    font-size: 1.5rem;
+    padding: 8px;
+    border: 2px solid #007bff;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 0 2px; /* Space between boxes */
+  }
+  
+  .peer-id-separator {
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin: 0 2px; /* Space between boxes and hyphens */
+  }
+  /* Style the label to be bold, larger, and centered */
+.peer-id-label {
+  display: block;
+  font-size: 1.5rem; /* Adjust font size as needed */
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1rem; /* Space below the label */
+}
+
+
+.peer-id-box {
+  display: inline-block;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  margin: 0.1rem;
+}
+
+.connect-now {
+  display: block; /* Block display to center the button */
+  width: 12%; /* Full width */
+  max-width: 300px; /* Adjust max width as needed */
+  margin: 1rem auto; /* Center horizontally and add margin */
+}
