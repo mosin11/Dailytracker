@@ -72,22 +72,32 @@ const CallComponent = ({ showMessage }) => {
     });
 
     peerRef.current.on('call', (call) => {
+      console.log('Receiving call from:', call.peer);
       call.answer(localStream);
       call.on('stream', (stream) => {
+        if (remoteVideoRef.current) {
+          remoteVideoRef.current.srcObject = stream;
+        }
         setRemoteStream(stream);
       });
     });
 
+
+
     navigator.mediaDevices.getUserMedia({
       video: callType === 'video',
-      audio: callType === 'video'
+      audio: callType === 'video',
     })
-      .then(stream => {
-        setLocalStream(stream);
-        if (localVideoRef.current) {
-          localVideoRef.current.srcObject = stream;
-        }
-      });
+    .then(stream => {
+      setLocalStream(stream);
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = stream;
+      }
+    })
+    .catch(error => {
+      console.error('Error accessing media devices.', error);
+      showMessage('Error accessing media devices.');
+    });
 
     // Cleanup on unmount
     return () => {
