@@ -49,24 +49,28 @@ const Login = ({ setMessageType, showMessage, setUserName,setIsAuthenticated }) 
         const loginData = {
           token,
           setMessageType,
-           showMessage
+           showMessage,
+           setIsAuthenticated
         };
   
         try {
-          const userId = await authToken(loginData);
+          const data = await authToken(loginData);
           
           // Assuming `authToken` returns a userId or some form of validation result
-          if (userId) {
-            setIsAuthenticated(true);
+          if (data.userId && data.isVerified) {
             navigate('/home');
+            setIsAuthenticated(true);
+            setUserName(data.userName);
+
           } else {
-            setIsAuthenticated(false);           
+            setIsAuthenticated(false);
             localStorage.removeItem("authToken")
           }
         } catch (error) {
           console.error('Error during authentication:', error);
           // Optionally handle the error, e.g., show a message to the user
           setIsAuthenticated(false);
+          localStorage.removeItem("authToken")
         }
       }
     }

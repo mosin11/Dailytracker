@@ -4,7 +4,7 @@ import axios from 'axios';
 import './css/AddNotes.css'; // Import your CSS file
 import EditNoteModal from './EditNoteModal';
 
-export default function YourNotes({ showMessage }) {
+export default function YourNotes({ showMessage,setIsAuthenticated }) {
 
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const token = localStorage.getItem('authToken');
@@ -52,6 +52,8 @@ export default function YourNotes({ showMessage }) {
       }
 
     } catch (error) {
+      setIsAuthenticated(false);
+      localStorage.removeItem("authToken")
       console.error('Error fetching notes:', error);
     }
   };

@@ -4,7 +4,7 @@ import axios from 'axios';
 import NoteItem from './NoteItem';
 import EditNoteModal from './EditNoteModal';
 
-export default function AddNotes({ setMessageType,showMessage }) {
+export default function AddNotes({ setMessageType,showMessage,setIsAuthenticated }) {
     // State for adding a new note
     const BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const token = localStorage.getItem('authToken');
@@ -42,6 +42,8 @@ export default function AddNotes({ setMessageType,showMessage }) {
             showMessage('Notes added successfully!');
             setMessageType('success');
         } catch (error) {
+            setIsAuthenticated(false);
+            localStorage.removeItem("authToken")
             showMessage('Error adding notes: ' + error.message);            
             setMessageType('Error');
         }
@@ -72,6 +74,8 @@ export default function AddNotes({ setMessageType,showMessage }) {
                 console.error('Unexpected response data format:', response.data);
             }
         } catch (error) {
+            setIsAuthenticated(false);
+            localStorage.removeItem("authToken")
             console.error('Error fetching notes:', error);
         }
     };
@@ -119,6 +123,8 @@ export default function AddNotes({ setMessageType,showMessage }) {
             showMessage('Note updated successfully!');          
             setMessageType('update');
         } catch (error) {
+            setIsAuthenticated(false);
+            localStorage.removeItem("authToken")
             showMessage('Error updating note: ' + error.message);                    
             setMessageType('error');
         }
@@ -137,6 +143,8 @@ export default function AddNotes({ setMessageType,showMessage }) {
             showMessage('Note deleted successfully!');           
             setMessageType('delete');
         } catch (error) {
+            setIsAuthenticated(false);
+            localStorage.removeItem("authToken")
             showMessage('Error deleting note: ' + error.message);                     
             setMessageType('error');
         }

@@ -65,6 +65,7 @@
   }
 
   export async function authToken({ token,setMessageType,
+    setIsAuthenticated,
     showMessage}) {
     // Now you can access token, setIsAuthenticated, etc., directly
    
@@ -78,8 +79,10 @@
             'Content-Type': 'application/json',
         }
     });
-     
-      return response.data.userId
+     debugger
+      return {userId: response.data.userId, 
+              isVerified: response.data.isVerified,
+              userName: response.data.userName}
   
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || 'Error occurred';
@@ -87,6 +90,7 @@
       localStorage.removeItem('authToken'); 
       showMessage(`Error signing up: ${errorMessage}`);
       setMessageType('error');
+      setIsAuthenticated(false);
      
      return null;
     }

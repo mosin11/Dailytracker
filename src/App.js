@@ -65,12 +65,12 @@ function App() {
       <Route path="/dailytracker" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
         
       {/* Protect all other routes */}
-      <Route path="/" element={<PrivateRoute element={<Home setMessageType={setMessageType} showMessage={showMessage}/>} />} />
-      <Route path="/home" element={<PrivateRoute element={<Home setMessageType={setMessageType} showMessage={showMessage}/>} />} />
-      <Route path="/addNotes" element={<PrivateRoute element={<AddNotes setMessageType={setMessageType} showMessage={showMessage} />} />} />
-      <Route path="/yourplan" element={<PrivateRoute element={<YourPlan setMessageType={setMessageType} showMessage={showMessage} />} />} />
-      <Route path="/getNotes" element={<PrivateRoute element={<YourNotes setMessageType={setMessageType} showMessage={showMessage} />} />} />
-      <Route path="/addPlan" element={<PrivateRoute element={<AddPlan setMessageType={setMessageType} showMessage={showMessage} />} />} />
+      <Route path="/" element={<PrivateRoute element={<Home setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage}/>} />} />
+      <Route path="/home" element={<PrivateRoute element={<Home setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage}/>} />} />
+      <Route path="/addNotes" element={<PrivateRoute element={<AddNotes setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
+      <Route path="/yourplan" element={<PrivateRoute element={<YourPlan setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
+      <Route path="/getNotes" element={<PrivateRoute element={<YourNotes setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
+      <Route path="/addPlan" element={<PrivateRoute element={<AddPlan setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
     </Routes>
   </Router>
   );
