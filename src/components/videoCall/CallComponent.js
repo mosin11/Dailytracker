@@ -4,6 +4,7 @@ import Peer from 'peerjs';
 import '../css/videocall.css'
 
 
+
 // utils/idGenerator.js
 export function generatePeerId() {
   //const id = Math.random().toString().slice(2, 18); // Generate a 16-digit number
@@ -21,14 +22,16 @@ const CallComponent = ({ showMessage }) => {
   const remoteVideoRef = useRef(null);
   const peerRef = useRef(null);
   const inputRefs = useRef([]);
+  const [ongoingCall, setOngoingCall] = useState(null); // Track the ongoing call
+  const [incomingCall, setIncomingCall] = useState(null); // For managing incoming calls
+  const [isCalling, setIsCalling] = useState(false); /// To track if the user is in a call
+ 
+  const incomingCallAudioRef = useRef(new Audio('Incoming_Call.mp3')); // Add your sound file path here
 
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const PORT = process.env.REACT_APP_PORT;
   const hostPath = process.env.REACT_APP_API_BASE_URL_PEER;
   
-
-
-
 
   const handleChange = (e, index) => {
     const { value } = e.target;
@@ -49,9 +52,10 @@ const CallComponent = ({ showMessage }) => {
     }
   };
 
-
-
-
+  const clearRemoteUserId = () => {
+    setRemoteUserId(Array(4).fill('')); // Clear the remote user ID inputs
+    inputRefs.current[0].focus(); // Set focus to the first input field
+  };
 
   useEffect(() => {
 
@@ -64,25 +68,28 @@ const CallComponent = ({ showMessage }) => {
       host: hostPath,
       //port: PORT,   // this only can use in localhost
       path: '/api/videocalls/userId',
-      secure: true, //false for localhost
+      secure: true, //false for localhost, true for https
     });
 
     peerRef.current.on('open', (id) => {
       setUserId(id);
     });
 
-    peerRef.current.on('call', (call) => {
+    peerRef.current.on('call', (call) => {debugger
       console.log('Receiving call from:', call.peer);
-      call.answer(localStream);
-      call.on('stream', (stream) => {
-        if (remoteVideoRef.current) {
-          remoteVideoRef.current.srcObject = stream;
-        }
-        setRemoteStream(stream);
-      });
+      incomingCallAudioRef.current.loop = true;
+      incomingCallAudioRef.current.play(); // Play incoming call sound
+      setOngoingCall(call); // Set the ongoing call
+      setIncomingCall(call); // Set the incoming call
+
+      // call.answer(localStream);
+      // call.on('stream', (stream) => {
+      //   if (remoteVideoRef.current) {
+      //     remoteVideoRef.current.srcObject = stream;
+      //   }
+      //   setRemoteStream(stream);
+      // });
     });
-
-
 
     navigator.mediaDevices.getUserMedia({
       video: callType === 'video',
@@ -130,6 +137,7 @@ const CallComponent = ({ showMessage }) => {
     });
 
       const call = peerRef.current.call(formattedUserId, localStream);
+      setOngoingCall(call); // Set the ongoing call
       call.on('stream', (stream) => {
         setRemoteStream(stream);
       });
@@ -142,6 +150,13 @@ const CallComponent = ({ showMessage }) => {
 
     } else {
       showMessage('Please enter a remote Remote ID.');
+    }
+  };
+  const endCall = () => {
+    if (ongoingCall) {
+      ongoingCall.close(); // End the call
+      setOngoingCall(null); // Clear the ongoing call state
+      showMessage('Call ended.');
     }
   };
 
@@ -159,6 +174,31 @@ const CallComponent = ({ showMessage }) => {
         {index < formattedId.split('-').length - 1 && <span className="peer-id-separator">-</span>}
       </React.Fragment>
     ));
+  };
+
+
+  const answerCall = () => {
+    if (incomingCall) {
+      incomingCallAudioRef.current.pause(); // Stop the incoming call sound
+      incomingCallAudioRef.current.currentTime = 0; // Reset sound position
+      incomingCall.answer(localStream);
+      incomingCall.on('stream', (stream) => {
+        if (remoteVideoRef.current) {
+          remoteVideoRef.current.srcObject = stream;
+        }
+        setRemoteStream(stream);
+      });
+     // setIncomingCall(null); // Clear incoming call
+    }
+  };
+
+  const rejectCall = () => {
+    if (incomingCall) {
+      incomingCallAudioRef.current.pause(); // Stop the incoming call sound
+      incomingCallAudioRef.current.currentTime = 0; // Reset sound position
+      incomingCall.close(); // Close the incoming call
+      setIncomingCall(null); // Clear incoming call
+    }
   };
 
 
@@ -195,9 +235,18 @@ const CallComponent = ({ showMessage }) => {
         <div className="container m-2">
         <button 
         style={{marginLeft: '40%'}}
-        className="btn btn-primary connect-now" onClick={callUser}>
+        className="btn btn-primary connect-now" onClick={callUser}
+        disabled={!!ongoingCall}
+        >
+          
           Connect Now
         </button>
+        <button 
+            className="btn btn-secondary mx-2" 
+            onClick={clearRemoteUserId}
+          >
+            Clear
+          </button>
         </div>
        
       </div>
@@ -226,6 +275,22 @@ const CallComponent = ({ showMessage }) => {
       >
         Switch to {callType === 'video' ? 'Audio' : 'Video'} Call
       </button>
+      {/* Incoming call action buttons */}
+      {incomingCall && (
+        <div className="d-flex justify-content-center mt-3">
+          <button className="btn btn-success me-2" onClick={answerCall}>
+            Answer
+          </button>
+          <button className="btn btn-danger" onClick={rejectCall}>
+            Reject
+          </button>
+        </div>
+      )}
+       {ongoingCall && (
+        <button className="btn btn-danger mx-3" onClick={endCall}>
+          End Call
+        </button>
+      )}
     </div>
   );
 };
