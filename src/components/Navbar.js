@@ -46,6 +46,7 @@ export default function Navbar({ setIsAuthenticated, userName }) {
                 to="/home" > Home
               </NavLink>
             </li>
+         
             <li className="nav-item">
               <NavLink
                 className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
@@ -76,8 +77,6 @@ export default function Navbar({ setIsAuthenticated, userName }) {
                 Your Plan
               </NavLink>
             </li>
-
-
             <li className="nav-item">
               <NavLink
                 className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}

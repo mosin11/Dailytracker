@@ -1,10 +1,11 @@
 .nav-link.active {
-    font-weight: bold;
-    background-color: blue;
-    padding: 5px 10px;
-    border-radius: 5px;
-    color: #00ff00; /* Change to your preferred color */
-  }
+  font-weight: bold !important;
+  background-color: blue !important;
+  padding: 5px 10px !important;
+  border-radius: 5px !important;
+  color: #00ff00 ;
+}
+
   .navbar-brand, .navbar-nav .nav-link {
     font-size: 1rem; /* Adjust the size as needed */
 }

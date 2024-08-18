@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/Auth.css';
-import {submitSignUp} from './Auth'
+import {submitSignUp,emailVerifications,OTPVerifications} from './Auth'
+
 
 
 
@@ -16,6 +17,10 @@ const Signup = ({ setMessageType, showMessage,setIsAuthenticated }) => {
 
     const [errors, setErrors] = useState({});
     const [passwordStrength, setPasswordStrength] = useState('');
+    const [showOtpForm, setShowOtpForm] = useState(false);
+    const [otpError, setOtpError] = useState('');
+    const [otpSent, setOtpSent] = useState(false);
+    const [otp, setOtp] = useState('');
     const [passwordRequirements, setPasswordRequirements] = useState({
         length: false,
         number: false,
@@ -83,6 +88,39 @@ const Signup = ({ setMessageType, showMessage,setIsAuthenticated }) => {
         };
     };
 
+
+    const handleOtpSubmit = async () => {
+        try {
+            const email =formData.email;
+            const isValided = await emailVerifications({email,setShowOtpForm,showMessage,setIsAuthenticated,setMessageType});     
+           return isValided.status;
+        } catch (error) {
+            showMessage(error.response.data.error);
+            setOtpError(error.response.data.error);
+            setOtp('');
+            return error.response.data.error
+        }
+    };
+
+    const verifyOTP= async()=>{
+        
+        const statusCode = await handleOtpSubmit();
+        if(statusCode ===200){
+            setShowOtpForm(true) ;
+        }
+    }
+    const handleOTPVerification = async ()=>{
+        let email =formData.email;
+        const verifyResponce =await OTPVerifications({email,otp,setShowOtpForm,setIsAuthenticated,showMessage, setMessageType });
+       debugger
+        if(verifyResponce.status ===200){
+            console.log("otp verify Responce",verifyResponce)
+            await submitSignUp({formData ,showMessage,navigate,setIsAuthenticated,setMessageType});   
+            setShowOtpForm(false);
+        }
+              
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const newErrors = {};
@@ -103,12 +141,16 @@ const Signup = ({ setMessageType, showMessage,setIsAuthenticated }) => {
         }
 
         if (Object.keys(newErrors).length === 0) {
-            
-           await submitSignUp({formData ,showMessage,navigate,setIsAuthenticated,setMessageType});       
+            const otpStatusCode = await verifyOTP()
+            console.log("otp status is ",otpStatusCode)
         } else {
             setErrors(newErrors);
             showMessage(newErrors);
             setMessageType('error');
+            setOtpError('');
+            setShowOtpForm(false);
+            setOtpSent(false);
+            setOtp('');
         }
     };
 
@@ -119,17 +161,23 @@ const Signup = ({ setMessageType, showMessage,setIsAuthenticated }) => {
             password: '',
             confirmPassword: '',
             phoneNumber: '',
+            
         });
         setErrors({});
         setPasswordStrength('');
+        setOtpError('');
+        setShowOtpForm(false);
+        setOtpSent(false);
+        setOtp('');
     };
 
 
     return (
         <div className="container d-flex justify-content-center my-3 align-items-center signup-container mt-5">
             <div className="card p-4 shadow-lg" style={{ background: 'linear-gradient(to right, #ff7e5f, #feb47b)', marginTop:"5%", maxWidth: '400px', width: '100%' }}>
-                <h2 className="text-center mb-4">Signup</h2>
-                <form onSubmit={handleSubmit}>
+                <h2 className="text-center mb-4">{showOtpForm ? 'Verify OTP' : 'Signup'}</h2>
+                {!showOtpForm ? (
+                <form>
                     <div className="my-3">
                         <label htmlFor="name" className="form-label">Name</label>
                         <input
@@ -230,7 +278,7 @@ const Signup = ({ setMessageType, showMessage,setIsAuthenticated }) => {
                             </small>
                         }
                     </div>
-                    <button type="submit" className="btn btn-primary mx-3 my-2">
+                    <button type="button" onClick={handleSubmit} className="btn btn-primary mx-3 my-2">
                         Signup
                     </button>
                     <button type="button" className="btn btn-secondary mx-3 my-2" onClick={handleClear}>
@@ -244,6 +292,28 @@ const Signup = ({ setMessageType, showMessage,setIsAuthenticated }) => {
                     </div>
 
                 </form>
+                ):(
+                    <div>
+                        <div className="my-3">
+                            <label htmlFor="otp" className="form-label">Enter OTP</label>
+                            <input
+                                id="otp"
+                                type="text"
+                                className={`form-control ${otpError ? 'is-invalid' : ''}`}
+                                placeholder="Enter OTP"
+                                value={otp}
+                                onChange={(e) => setOtp(e.target.value)}
+                            />
+                            {otpError && <div className="invalid-feedback">{otpError}</div>}
+                        </div>
+                        <div className="text-center">
+                            <button type="button" className="btn btn-primary w-100" onClick={handleOTPVerification}>Verify OTP</button>
+                        </div>
+                        <div className="text-center mt-2">
+                            <button type="button" className="btn btn-secondary w-100" onClick={() => setShowOtpForm(false)}>Back</button>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -7,9 +7,11 @@
   export async function submitSignUp({ formData,setIsAuthenticated, showMessage, navigate, setMessageType }) {
     try {
   
+      console.log("formData",formData)
       const BASE_URL = process.env.REACT_APP_API_BASE_URL;
     
       const { name, email, password, phoneNumber } = formData;
+      console.log("name, email, password, phoneNumber",name, email, password, phoneNumber)
 
 
       // Hash the password using bcrypt
@@ -28,7 +30,7 @@
       navigate('/login');
       showMessage('Sign-up successful!');
       setMessageType('success');
-      setIsAuthenticated(true);
+      setIsAuthenticated(false);
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || 'Error occurred';
       console.error('Error details:', error.response?.data);
@@ -48,6 +50,11 @@
         email,
         password
       });
+      if(!response){
+        showMessage(`Error Login`);
+        setMessageType('error');
+        setIsAuthenticated(false);
+      }
       console.log("response.data.token",response.data.user.name)
       navigate('/home');
       showMessage('Login successful!');
@@ -63,6 +70,65 @@
       setIsAuthenticated(false);
     }
   }
+
+
+  
+  export async function emailVerifications({email,setShowOtpForm,setIsAuthenticated,showMessage, setMessageType }) {
+    try {
+      const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+      const url = `${BASE_URL}/users/auth/email-verification`;
+      
+  
+      const response = await axios.post(url,{
+        email
+      });
+      console.log("response in emailVerifications ",response)
+      showMessage('OTP sent successful!');
+      setMessageType('success');
+      setShowOtpForm(true)
+      setIsAuthenticated(false);
+      return response;
+      
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || error.message || 'Error occurred';
+      console.error('Error details:', error.response?.data);
+      showMessage(`Error Login: ${errorMessage}`);
+      setMessageType('error');
+      setIsAuthenticated(false);
+      return { error: errorMessage };
+    }
+  }
+
+
+  
+  export async function OTPVerifications({email,otp,setShowOtpForm,setIsAuthenticated,showMessage, setMessageType }) {
+    try {
+      const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+      const url = `${BASE_URL}/users/auth/verifyOtp`;
+      
+      console.log("url",url)
+  
+      const response = await axios.post(url,{
+        email, 
+        otp
+      });
+      console.log("response in OTPVerifications ",response)
+      showMessage('OTP verified successful!');
+      setMessageType('success');
+      setShowOtpForm(true)
+      setIsAuthenticated(false);
+      return response;
+      
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || error.message || 'Error occurred';
+      console.error('Error details:', error.response?.data);
+      showMessage(`Error Login: ${errorMessage}`);
+      setMessageType('error');
+      setIsAuthenticated(false);
+      return { error: errorMessage };
+    }
+  }
+
 
   export async function authToken({ token,setMessageType,
     setIsAuthenticated,
@@ -95,10 +161,6 @@
     }
   }
   
-
-
-
-
   export default function Auth() {
     return (
       <div>
