@@ -51,7 +51,7 @@ const CallComponent = ({ showMessage }) => {
     }
     const data = await response.json();
     console.log("response from call compoments data", data);
-
+    setPhoneNumber(data.phoneNumber);
     return data.phoneNumber// Generate a 16-digit number
   }
 
@@ -98,7 +98,6 @@ const CallComponent = ({ showMessage }) => {
     const id = await getUserPhoneNumber();
     console.log("id is ", id)
     debugger
-    setPhoneNumber(id);
     if (phoneNumber) {
       console.log("vedio id", id, "PORT", PORT)
       // Initialize PeerJS
@@ -114,7 +113,6 @@ const CallComponent = ({ showMessage }) => {
       });
 
       peerRef.current.on('call', (call) => {
-        debugger
         console.log('Receiving call from:', call.peer);
         incomingCallAudioRef.current.loop = true;
         incomingCallAudioRef.current.play(); // Play incoming call sound
