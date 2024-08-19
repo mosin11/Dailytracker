@@ -98,10 +98,10 @@ const CallComponent = ({ showMessage }) => {
     const id = await getUserPhoneNumber();
     console.log("id is ", id)
     debugger
-    if (phoneNumber) {
+    if (id) {
       console.log("vedio id", id, "PORT", PORT)
       // Initialize PeerJS
-      peerRef.current = new Peer(phoneNumber, {
+      peerRef.current = new Peer(id, {
         host: hostPath,
         //port: PORT,   // this only can use in localhost
         path: '/api/videocalls/userId',
