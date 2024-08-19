@@ -109,7 +109,7 @@ const CallComponent = ({ showMessage }) => {
       });
 
       peerRef.current.on('open', (id) => {
-        setRemoteUserPhoneNumber(id);
+       // setRemoteUserPhoneNumber(id);
       });
 
       peerRef.current.on('call', (call) => {
@@ -118,14 +118,6 @@ const CallComponent = ({ showMessage }) => {
         incomingCallAudioRef.current.play(); // Play incoming call sound
         setOngoingCall(call); // Set the ongoing call
         setIncomingCall(call); // Set the incoming call
-
-        // call.answer(localStream);
-        // call.on('stream', (stream) => {
-        //   if (remoteVideoRef.current) {
-        //     remoteVideoRef.current.srcObject = stream;
-        //   }
-        //   setRemoteStream(stream);
-        // });
       });
 
       navigator.mediaDevices.getUserMedia({
@@ -176,8 +168,18 @@ const CallComponent = ({ showMessage }) => {
         },
         body: JSON.stringify({ userId: remoteUserPhoneNumber, action: 'call_initiated' }),
       });
-      console.log('Calling user with Phone Number:', remoteUserPhoneNumber,localStream);
+      debugger
+      if (!peerRef.current) {
+        console.error("Peer reference is not initialized");
+        return;
+    }
+    
+    if (!peerRef.current.open) {
+        console.error("PeerJS connection is not open");
+        return;
+    }
       const call = peerRef.current.call(remoteUserPhoneNumber, localStream);
+      console.log('Calling call user with Phone Number:', call);
       setOngoingCall(call); // Set the ongoing call
       call.on('stream', (stream) => {
         setRemoteStream(stream);
@@ -190,7 +192,7 @@ const CallComponent = ({ showMessage }) => {
       });
 
     } else {
-      showMessage('Please enter a remote Remote ID.');
+      showMessage('Please enter Phone Number.');
     }
   };
   const endCall = () => {
@@ -201,21 +203,21 @@ const CallComponent = ({ showMessage }) => {
     }
   };
 
-  const formatPeerId = (id) => {
-    if (!id) return '';
-    // Split the ID into chunks of 4 characters and join with '-'
-    const formattedId = id.match(/.{1,4}/g).join('-');
+  // const formatPeerId = (id) => {
+  //   if (!id) return '';
+  //   // Split the ID into chunks of 4 characters and join with '-'
+  //   const formattedId = id.match(/.{1,4}/g).join('-');
 
-    // Create an array of elements to be rendered with hyphens
-    return formattedId.split('-').map((chunk, index) => (
-      <React.Fragment key={index}>
-        <span className="peer-id-box">
-          {chunk}
-        </span>
-        {index < formattedId.split('-').length - 1 && <span className="peer-id-separator">-</span>}
-      </React.Fragment>
-    ));
-  };
+  //   // Create an array of elements to be rendered with hyphens
+  //   return formattedId.split('-').map((chunk, index) => (
+  //     <React.Fragment key={index}>
+  //       <span className="peer-id-box">
+  //         {chunk}
+  //       </span>
+  //       {index < formattedId.split('-').length - 1 && <span className="peer-id-separator">-</span>}
+  //     </React.Fragment>
+  //   ));
+  // };
 
 
   const answerCall = () => {
@@ -251,12 +253,12 @@ const CallComponent = ({ showMessage }) => {
           {callType.charAt(0).toUpperCase() + callType.slice(1)} Call
         </h1>
         <div className="mb-3">
-          {/* <div className="peer-id-container">
+           <div className="peer-id-container">
             <label className="form-label peer-id-label">Your ID:</label>
             <div className="peer-id-boxes">
-              {formatPeerId(userId)}
+              {phoneNumber}
             </div>
-          </div> */}
+          </div>
           {/* <br /> */}
           {/* <label className="form-label peer-id-label">Enter Remote ID:</label> */}
           {/* <div className="d-flex justify-content-center mb-3">
