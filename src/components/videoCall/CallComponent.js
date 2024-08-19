@@ -19,6 +19,7 @@ const CallComponent = ({ showMessage }) => {
   const [ongoingCall, setOngoingCall] = useState(null); // Track the ongoing call
   const [incomingCall, setIncomingCall] = useState(null); // For managing incoming calls
   const [remoteUserPhoneNumber, setRemoteUserPhoneNumber] = useState('');
+  const [callButtonsDisabled, setCallButtonsDisabled] = useState(false);
 
 
   const incomingCallAudioRef = useRef(new Audio('Incoming_Call.mp3')); // Add your sound file path here
@@ -127,7 +128,6 @@ const CallComponent = ({ showMessage }) => {
         peerRef.current.destroy();
       }
 
-
       peerRef.current = new Peer(localPeerId , {
         host: hostPath,
         //port: PORT,   // this only can use in localhost
@@ -200,14 +200,26 @@ const CallComponent = ({ showMessage }) => {
         return;
     }
       const call = peerRef.current.call(remoteUserPhoneNumber, localStream);
-      console.log('Calling call user with Phone Number:', call);
+      console.log('Calling call user with Phone Number:', remoteUserPhoneNumber);
       setOngoingCall(call); // Set the ongoing call
+
       call.on('stream', (stream) => {
+        console.log('Calling call on stream user with Phone Number:');
         setRemoteStream(stream);
       });
       call.on('close', () => {
         setRemoteStream(null); // Optionally clear remote stream when call ends
+        showMessage('Call ended by the other peer.');
       });
+
+      peerRef.current.on('connection', (conn) => {
+        conn.on('data', (data) => {
+          if (data.type === 'call-end') {
+            endCall();
+          }
+        });
+      });
+
       call.on('error', (error) => {
         showMessage(`Call error: ${error.message}`);
       });
@@ -217,11 +229,25 @@ const CallComponent = ({ showMessage }) => {
     }
   };
   const endCall = () => {
+ 
     if (ongoingCall) {
-      ongoingCall.close(); // End the call
-      setOngoingCall(null); // Clear the ongoing call state
-      showMessage('Call ended.');
+      // Send call-end message to the remote peer
+      const conn = peerRef.current.connect(remoteUserPhoneNumber); // Create a connection to the remote peer
+      conn.on('open', () => {
+        conn.send({ type: 'call-end' });
+      });
+  
+      ongoingCall.close();
+      setOngoingCall(null);
     }
+    if (peerRef.current) {
+      peerRef.current.disconnect();
+      peerRef.current.destroy();
+    }
+    setLocalStream(null);
+    setRemoteStream(null);
+    showMessage('Call ended.');
+
   };
 
   // const formatPeerId = (id) => {
@@ -252,7 +278,8 @@ const CallComponent = ({ showMessage }) => {
         }
         setRemoteStream(stream);
       });
-      // setIncomingCall(null); // Clear incoming call
+       setIncomingCall(null); // Clear incoming call
+       setCallButtonsDisabled(true); // Disable the buttons after answering
     }
   };
 
@@ -262,6 +289,8 @@ const CallComponent = ({ showMessage }) => {
       incomingCallAudioRef.current.currentTime = 0; // Reset sound position
       incomingCall.close(); // Close the incoming call
       setIncomingCall(null); // Clear incoming call
+      setCallButtonsDisabled(true); // Disable the buttons after answering
+      
     }
   };
 
@@ -314,7 +343,7 @@ const CallComponent = ({ showMessage }) => {
             <button
               style={{ marginLeft: '40%' }}
               className="btn btn-primary connect-now" onClick={callUser}
-              disabled={!!ongoingCall}
+              disabled={!!ongoingCall || callButtonsDisabled}
             >
 
               Connect Now
@@ -356,10 +385,16 @@ const CallComponent = ({ showMessage }) => {
         {/* Incoming call action buttons */}
         {incomingCall && (
           <div className="d-flex justify-content-center mt-3">
-            <button className="btn btn-success me-2" onClick={answerCall}>
+            <button className="btn btn-success me-2" 
+            onClick={answerCall}
+            disabled={callButtonsDisabled}
+            >
               Answer
             </button>
-            <button className="btn btn-danger" onClick={rejectCall}>
+            <button className="btn btn-danger" 
+            onClick={rejectCall}
+            disabled={callButtonsDisabled}
+            >
               Reject
             </button>
           </div>
