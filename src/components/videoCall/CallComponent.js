@@ -111,7 +111,7 @@ const CallComponent = ({ showMessage }) => {
   const initializePhoneId = async  () => {
     const localPeerId  = await getUserPhoneNumber();
     //let localPeerId  = phoneNumber; 
-    debugger
+    //debugger
     console.log("id is ", localPeerId )
     if (localPeerId) {
       console.log("vedio id", localPeerId , "PORT", PORT);
@@ -188,7 +188,7 @@ const CallComponent = ({ showMessage }) => {
       //   },
       //   body: JSON.stringify({ userId: remoteUserPhoneNumber, action: 'call_initiated' }),
       // });
-      debugger
+      //debugger
       initializePhoneId();
       if (!peerRef.current) {
         console.error("Peer reference is not initialized");
@@ -212,7 +212,7 @@ const CallComponent = ({ showMessage }) => {
         showMessage('Call ended by the other peer.');
       });
 
-      peerRef.current.on('connection', (conn) => {
+      peerRef.current.on('connection', (conn) => {debugger
         conn.on('data', (data) => {
           if (data.type === 'call-end') {
             endCall();
@@ -271,13 +271,24 @@ const CallComponent = ({ showMessage }) => {
     if (incomingCall) {
       incomingCallAudioRef.current.pause(); // Stop the incoming call sound
       incomingCallAudioRef.current.currentTime = 0; // Reset sound position
+      console.log("incomingCall in answer",incomingCall)
       incomingCall.answer(localStream);
-      incomingCall.on('stream', (stream) => {
+       // Debugging logs
+    console.log('Answering call with local stream:', localStream);
+    
+      incomingCall.on('stream', (stream) => {debugger
+        console.log('Received remote stream:', stream);
         if (remoteVideoRef.current) {
           remoteVideoRef.current.srcObject = stream;
         }
         setRemoteStream(stream);
       });
+
+      // Optional: Add error handling
+    incomingCall.on('error', (error) => {
+      console.error('Incoming call error:', error);
+      showMessage(`Incoming call error: ${error.message}`);
+    });
        setIncomingCall(null); // Clear incoming call
        setCallButtonsDisabled(true); // Disable the buttons after answering
     }
@@ -291,6 +302,9 @@ const CallComponent = ({ showMessage }) => {
       setIncomingCall(null); // Clear incoming call
       setCallButtonsDisabled(true); // Disable the buttons after answering
       
+    }
+    else {
+      showMessage('No incoming call to answer.');
     }
   };
 
