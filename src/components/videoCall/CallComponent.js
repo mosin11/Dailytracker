@@ -97,6 +97,7 @@ const CallComponent = ({ showMessage }) => {
     const initializePhoneId = async  () => {
     const id = await getUserPhoneNumber();
     console.log("id is ", id)
+    debugger
     setPhoneNumber(id);
     if (phoneNumber) {
       console.log("vedio id", id, "PORT", PORT)
@@ -168,19 +169,16 @@ const CallComponent = ({ showMessage }) => {
 
     if (isValidPhoneNumber) {
 
-      console.log('Calling user with Phone Number:', remoteUserPhoneNumber);
-
-
       // Log the call initiation on the server
 
-      fetch(`${BASE_URL}/videocalls/userId/log`, { // Make sure this endpoint exists on your server
+      fetch(`https://${hostPath}/api//videocalls/userId/log`, { // Make sure this endpoint exists on your server
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ userId: remoteUserPhoneNumber, action: 'call_initiated' }),
       });
-
+      console.log('Calling user with Phone Number:', remoteUserPhoneNumber,localStream);
       const call = peerRef.current.call(remoteUserPhoneNumber, localStream);
       setOngoingCall(call); // Set the ongoing call
       call.on('stream', (stream) => {
