@@ -123,6 +123,7 @@ const CallComponent = ({ showMessage }) => {
 
       peerRef.current.on('open', (remoteId) => {
        // setRemoteUserPhoneNumber(remoteId);
+       console.log('PeerJS connection opened with ID:', remoteId);
       });
 
       peerRef.current.on('call', (call) => {
