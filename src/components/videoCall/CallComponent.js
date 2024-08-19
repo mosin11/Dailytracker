@@ -90,7 +90,7 @@ const CallComponent = ({ showMessage }) => {
 
   useEffect(() => {
     // Generate a human-readable ID
-     // initializePhoneId();
+      initializePhoneId();
       // Cleanup on unmount
       getUserPhoneNumber();
       return () => {
@@ -108,22 +108,40 @@ const CallComponent = ({ showMessage }) => {
 
 
   const initializePhoneId = async  () => {
-    //const localPeerId  = await getUserPhoneNumber();
-    let localPeerId  = phoneNumber;
+    const localPeerId  = await getUserPhoneNumber();
+    //let localPeerId  = phoneNumber; 
+    debugger
     console.log("id is ", localPeerId )
     if (localPeerId) {
       console.log("vedio id", localPeerId , "PORT", PORT);
       // Initialize PeerJS
+
+
+
+      if (localStream) {
+        console.log("vedio localStream ");
+        localStream.getTracks().forEach(track => track.stop());
+      }
+      if (peerRef.current) {
+        console.log("vedio localStream destroy ");
+        peerRef.current.destroy();
+      }
+
+
       peerRef.current = new Peer(localPeerId , {
         host: hostPath,
         //port: PORT,   // this only can use in localhost
         path: '/api/videocalls/userId',
         secure: true, //false for localhost, true for https
       });
-
+      console.log('Peer object initialized:', peerRef.current);
       peerRef.current.on('open', (remoteId) => {
        // setRemoteUserPhoneNumber(remoteId);
+       console.log('PeerJS connection opened:', peerRef.current);
        console.log('PeerJS connection opened with ID:', remoteId);
+      });
+      peerRef.current.on('error', (err) => {
+        console.error('PeerJS encountered an error:', err);
       });
 
       peerRef.current.on('call', (call) => {
@@ -163,13 +181,13 @@ const CallComponent = ({ showMessage }) => {
 
       // Log the call initiation on the server
 
-      fetch(`https://${hostPath}/api/videocalls/userId/log`, { // Make sure this endpoint exists on your server
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userId: remoteUserPhoneNumber, action: 'call_initiated' }),
-      });
+      // fetch(`https://${hostPath}/api/videocalls/userId/log`, { // Make sure this endpoint exists on your server
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({ userId: remoteUserPhoneNumber, action: 'call_initiated' }),
+      // });
       debugger
       initializePhoneId();
       if (!peerRef.current) {
