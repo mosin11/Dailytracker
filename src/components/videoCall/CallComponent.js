@@ -16,10 +16,8 @@ const CallComponent = ({ showMessage }) => {
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
   const peerRef = useRef(null);
-  const inputRefs = useRef([]);
   const [ongoingCall, setOngoingCall] = useState(null); // Track the ongoing call
   const [incomingCall, setIncomingCall] = useState(null); // For managing incoming calls
-  const [isCalling, setIsCalling] = useState(false); /// To track if the user is in a call
   const [remoteUserPhoneNumber, setRemoteUserPhoneNumber] = useState('');
 
 
@@ -91,25 +89,40 @@ const CallComponent = ({ showMessage }) => {
   };
 
   useEffect(() => {
-
     // Generate a human-readable ID
+     // initializePhoneId();
+      // Cleanup on unmount
+      getUserPhoneNumber();
+      return () => {
+        if (localStream) {
+          localStream.getTracks().forEach(track => track.stop());
+        }
+        if (peerRef.current) {
+          peerRef.current.destroy();
+        }
+      };
+    
+  }, [callType]);
 
-    const initializePhoneId = async  () => {
-    const id = await getUserPhoneNumber();
-    console.log("id is ", id)
-    debugger
-    if (id) {
-      console.log("vedio id", id, "PORT", PORT)
+
+
+
+  const initializePhoneId = async  () => {
+    //const localPeerId  = await getUserPhoneNumber();
+    let localPeerId  = phoneNumber;
+    console.log("id is ", localPeerId )
+    if (localPeerId) {
+      console.log("vedio id", localPeerId , "PORT", PORT);
       // Initialize PeerJS
-      peerRef.current = new Peer(id, {
+      peerRef.current = new Peer(localPeerId , {
         host: hostPath,
         //port: PORT,   // this only can use in localhost
         path: '/api/videocalls/userId',
         secure: true, //false for localhost, true for https
       });
 
-      peerRef.current.on('open', (id) => {
-       // setRemoteUserPhoneNumber(id);
+      peerRef.current.on('open', (remoteId) => {
+       // setRemoteUserPhoneNumber(remoteId);
       });
 
       peerRef.current.on('call', (call) => {
@@ -137,18 +150,6 @@ const CallComponent = ({ showMessage }) => {
 
       }
     }
-      initializePhoneId();
-      // Cleanup on unmount
-      return () => {
-        if (localStream) {
-          localStream.getTracks().forEach(track => track.stop());
-        }
-        if (peerRef.current) {
-          peerRef.current.destroy();
-        }
-      };
-    
-  }, [callType]);
 
   const callUser = () => {
 
@@ -169,6 +170,7 @@ const CallComponent = ({ showMessage }) => {
         body: JSON.stringify({ userId: remoteUserPhoneNumber, action: 'call_initiated' }),
       });
       debugger
+      initializePhoneId();
       if (!peerRef.current) {
         console.error("Peer reference is not initialized");
         return;
