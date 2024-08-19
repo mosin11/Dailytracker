@@ -171,7 +171,7 @@ const CallComponent = ({ showMessage }) => {
 
       // Log the call initiation on the server
 
-      fetch(`https://${hostPath}/api//videocalls/userId/log`, { // Make sure this endpoint exists on your server
+      fetch(`https://${hostPath}/api/videocalls/userId/log`, { // Make sure this endpoint exists on your server
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
