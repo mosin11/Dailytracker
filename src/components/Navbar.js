@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './css/Navbar.css';
 import logo from './img/logo-512.jpeg';
@@ -15,6 +15,32 @@ export default function Navbar({ setIsAuthenticated, userName }) {
     navigate('/login');
 
   };
+
+   // This useEffect hook adds the event listener to handle link clicks in mobile view
+   useEffect(() => {
+    const handleNavLinkClick = () => {
+      const navbarToggler = document.querySelector('.navbar-toggler');
+      const navbarCollapse = document.querySelector('.navbar-collapse');
+
+      // Check if the navbar-toggler button is visible (mobile view)
+      if (navbarToggler && window.getComputedStyle(navbarToggler).display !== 'none') {
+        // If the navbar is expanded, collapse it
+        if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+          navbarToggler.click(); // Manually trigger the collapse
+        }
+      }
+    };
+
+    // Add event listener to all navbar links
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => link.addEventListener('click', handleNavLinkClick));
+
+    // Clean up the event listeners on component unmount
+    return () => {
+      navLinks.forEach(link => link.removeEventListener('click', handleNavLinkClick));
+    };
+  }, []);
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div className="container-fluid">
