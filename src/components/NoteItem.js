@@ -18,7 +18,8 @@ const NoteItem = ({ title, description, date, tag,deleteNotes,editNotes }) => {
     setShowFullTitle(!showFullTitle);
   };
 
-  const toggleText = () => {
+  const toggleText = (event) => {debugger
+    event.preventDefault();
     setShowFullText(!showFullText);
   };
 

@@ -49,31 +49,25 @@ function App() {
     {isAuthenticated && <Navbar userName={userName} setIsAuthenticated={setIsAuthenticated}/>}
     <AlertMessage message={message} type={messageType} visible={visible} />
     <Routes>
-      {/* Render only the login and signup routes when not authenticated */}
-      <Route path="/login" element={<Login setUserName={setUserName} setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} />} />
-      <Route path="Dailytracker/login" element={<Login setUserName={setUserName} setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} />} />
-      <Route path="/signup" element={<Signup setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} />} />
-      <Route path="/forgot-password" element={<ForgotPassword setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} />} />
-      <Route path="/reset-password/:token" element={<ResetPassword setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} />} />
-      
-      {/* wildcard route
-      <Route path="*" element={<Navigate to={isAuthenticated ? "/home" : "/login"} />} /> 
-      */}
+  {/* Only render login and signup routes when not authenticated */}
+  <Route path="/login" element={!isAuthenticated ? <Login setUserName={setUserName} setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} /> : <Navigate to="/home" />} />
+  <Route path="/signup" element={!isAuthenticated ? <Signup setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} /> : <Navigate to="/home" />} />
+  <Route path="/forgot-password" element={<ForgotPassword setMessageType={setMessageType} showMessage={showMessage} />} />
+  <Route path="/reset-password/:token" element={<ResetPassword setMessageType={setMessageType} showMessage={showMessage} />} />
 
-      {/* Default route should redirect to login if not authenticated */}
-      <Route path="/Dailytracker" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
-         {/* Default route should redirect to login if not authenticated */}
-      <Route path="/dailytracker" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
-        
-      {/* Protect all other routes */}
-      <Route path="/" element={<PrivateRoute element={<Home setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage}/>} />} />
-      <Route path="/home" element={<PrivateRoute element={<Home setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage}/>} />} />
-      <Route path="/addNotes" element={<PrivateRoute element={<AddNotes setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
-      <Route path="/yourplan" element={<PrivateRoute element={<YourPlan setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
-      <Route path="/getNotes" element={<PrivateRoute element={<YourNotes setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
-      <Route path="/addPlan" element={<PrivateRoute element={<AddPlan setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
-      <Route path="/video-call" element={<PrivateRoute element={<CallComponent setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
-    </Routes>
+  {/* Protect other routes */}
+  <Route path="/" element={<PrivateRoute element={<Home setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
+  <Route path="/home" element={<PrivateRoute element={<Home setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
+  <Route path="/addNotes" element={<PrivateRoute element={<AddNotes setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
+  <Route path="/yourplan" element={<PrivateRoute element={<YourPlan setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
+  <Route path="/getNotes" element={<PrivateRoute element={<YourNotes setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
+  <Route path="/addPlan" element={<PrivateRoute element={<AddPlan setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
+  <Route path="/video-call" element={<PrivateRoute element={<CallComponent setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
+
+  {/* Fallback route */}
+  <Route path="*" element={<Navigate to={isAuthenticated ? "/home" : "/login"} />} />
+</Routes>
+
   </Router>
   );
 }
