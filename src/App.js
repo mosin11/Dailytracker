@@ -38,7 +38,7 @@ function App() {
 
   return (
 
-    <Router basename="/Dailytracker">
+    <Router >
      {!isAuthenticated && (
         <div className="bg-primary text-white p-2 rounded border border-white" style={{ position: 'absolute', top: '10px', left: '10px', display: 'flex', alignItems: 'center' }}>
           <img src={logo} alt="Logo" style={{ height: '50px', marginRight: '10px' }} />
