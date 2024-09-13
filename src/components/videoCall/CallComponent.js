@@ -11,7 +11,7 @@ const CallComponent = ({ showMessage }) => {
   const [phoneNumber, setPhoneNumber] = useState(''); // New state for phone number
 
   const [localStream, setLocalStream] = useState(null);
-  const [remoteStream, setRemoteStream] = useState(null);
+ // const [remoteStream, setRemoteStream] = useState(null);
   const [callType, setCallType] = useState('video'); // 'video' or 'audio'
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);

@@ -74,7 +74,6 @@ const Login = ({ setMessageType, showMessage, setUserName,setIsAuthenticated }) 
         }
       }
     }
-  
     // Call the async function
     fetchData();
   }, [token]);

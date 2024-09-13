@@ -19,7 +19,7 @@ const Signup = ({ setMessageType, showMessage,setIsAuthenticated }) => {
     const [passwordStrength, setPasswordStrength] = useState('');
     const [showOtpForm, setShowOtpForm] = useState(false);
     const [otpError, setOtpError] = useState('');
-    const [otpSent, setOtpSent] = useState(false);
+  //  const [otpSent, setOtpSent] = useState(false);
     const [otp, setOtp] = useState('');
     const [passwordRequirements, setPasswordRequirements] = useState({
         length: false,
@@ -106,6 +106,7 @@ const Signup = ({ setMessageType, showMessage,setIsAuthenticated }) => {
         
         const statusCode = await handleOtpSubmit();
         if(statusCode ===200){
+           // setOtpSent(true);
             setShowOtpForm(true) ;
         }
     }
@@ -149,7 +150,7 @@ const Signup = ({ setMessageType, showMessage,setIsAuthenticated }) => {
             setMessageType('error');
             setOtpError('');
             setShowOtpForm(false);
-            setOtpSent(false);
+           // setOtpSent(false);
             setOtp('');
         }
     };
@@ -167,7 +168,7 @@ const Signup = ({ setMessageType, showMessage,setIsAuthenticated }) => {
         setPasswordStrength('');
         setOtpError('');
         setShowOtpForm(false);
-        setOtpSent(false);
+       // setOtpSent(false);
         setOtp('');
     };
 
