@@ -116,9 +116,7 @@ const CallComponent = ({ showMessage }) => {
     if (localPeerId) {
       console.log("vedio id", localPeerId, "PORT", PORT);
       // Initialize PeerJS
-
-
-
+      
       if (localStream) {
         console.log("vedio localStream ");
         localStream.getTracks().forEach(track => track.stop());
@@ -198,7 +196,13 @@ const CallComponent = ({ showMessage }) => {
       if (!peerRef.current.open) {
         console.error("PeerJS connection is not open");
         return;
+<<<<<<< HEAD
       }
+=======
+    }
+      requestMediaAccess(); // Added call to request media access
+
+>>>>>>> 6b599d41ec9e1dd950dc3857e50f4f71d1aa46cb
       const call = peerRef.current.call(remoteUserPhoneNumber, localStream);
       setOngoingCall(call); // Set the ongoing call
 
@@ -232,6 +236,7 @@ const CallComponent = ({ showMessage }) => {
       showMessage('Please enter Phone Number.');
     }
   };
+
   const endCall = () => {
 
     if (ongoingCall) {
@@ -313,6 +318,23 @@ const CallComponent = ({ showMessage }) => {
       showMessage('No incoming call to answer.');
     }
   };
+
+  const requestMediaAccess = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: callType === 'video',
+        audio: callType === 'video',
+      });
+      setLocalStream(stream);
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = stream;
+      }
+    } catch (error) {
+      console.error('Error accessing media devices.', error);
+      showMessage('Error accessing media devices.');
+    }
+  };
+  
 
 
 

@@ -56,6 +56,9 @@ function App() {
       <Route path="/forgot-password" element={<ForgotPassword setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} />} />
       <Route path="/reset-password/:token" element={<ResetPassword setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} />} />
       
+      {/* wildcard route
+      <Route path="*" element={<Navigate to={isAuthenticated ? "/home" : "/login"} />} /> 
+      */}
 
       {/* Default route should redirect to login if not authenticated */}
       <Route path="/Dailytracker" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
