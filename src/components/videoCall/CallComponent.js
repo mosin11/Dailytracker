@@ -196,13 +196,9 @@ const CallComponent = ({ showMessage }) => {
       if (!peerRef.current.open) {
         console.error("PeerJS connection is not open");
         return;
-<<<<<<< HEAD
       }
-=======
-    }
+    
       requestMediaAccess(); // Added call to request media access
-
->>>>>>> 6b599d41ec9e1dd950dc3857e50f4f71d1aa46cb
       const call = peerRef.current.call(remoteUserPhoneNumber, localStream);
       setOngoingCall(call); // Set the ongoing call
 
