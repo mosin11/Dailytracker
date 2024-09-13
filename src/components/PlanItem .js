@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import moment from 'moment'; 
 
 const PlanItem = ({ title, description, date, tag, deletePlan, editPlan }) => {
   // Format date to a more readable format
-  const formattedDate = new Date(date).toLocaleDateString('en-US', {
+  const formattedDate = new Date(date).toLocaleDateString('en-IN', {
     year: 'numeric',
-    month: 'long',
     day: 'numeric',
+    month: 'short',
     hour: 'numeric',
     minute: 'numeric',
     hour12: true,
@@ -23,12 +24,28 @@ const PlanItem = ({ title, description, date, tag, deletePlan, editPlan }) => {
     setShowFullText(!showFullText);
   };
 
+  const formatTimeAgo = (date) => {
+    const now = new Date();
+  const postDate = new Date(date);
+  const diff = now - postDate; // Difference in milliseconds
+
+  const minutes = Math.floor(diff / (1000 * 60));
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+  if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
+  if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+  if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+  return 'Just now';
+  };
+
   return (
     <div className='my-3'>
       <div
         className="card h-100"
         style={{ background: 'linear-gradient(to bottom, #19f5ea, #feb47b)' }}
-      >
+      ><div>
+        
         <h5
           className="card-header"
           style={{
@@ -37,13 +54,18 @@ const PlanItem = ({ title, description, date, tag, deletePlan, editPlan }) => {
             whiteSpace: 'nowrap',
           }}
         >
-          {formattedDate}
+          {title}
         </h5>
+        <blockquote className="blockquote mb-0">
+          <p className="mb-0">{formattedDate}</p>
+        </blockquote>
+      </div>
+        
         <div
           className="card-body d-flex flex-column"
           style={{ background: 'linear-gradient(to bottom, #19f5ea, #feb47b)' }}
         >
-          <h5
+          {/* <h5
             className="card-title"
             style={{
               overflow: 'hidden',
@@ -55,7 +77,7 @@ const PlanItem = ({ title, description, date, tag, deletePlan, editPlan }) => {
             }}
           >
             {title}
-          </h5>
+          </h5> */}
           {title.length > 500 && (
             <span
               onClick={toggleTitle}
@@ -106,6 +128,9 @@ const PlanItem = ({ title, description, date, tag, deletePlan, editPlan }) => {
               <i className="bi bi-trash"></i>
             </span>
           </div>
+        </div>
+        <div className="card-footer text-muted d-flex justify-content-between align-items-center">
+        <span>{formatTimeAgo(date)}</span>
         </div>
       </div>
     </div>
