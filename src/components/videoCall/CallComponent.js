@@ -9,7 +9,7 @@ import '../css/videocall.css'
 const CallComponent = ({ showMessage }) => {
   // const [userId, setUserId] = useState('');
   const [phoneNumber, setPhoneNumber] = useState(''); // New state for phone number
-  const [remoteUserId, setRemoteUserId] = useState(Array(4).fill(''));
+
   const [localStream, setLocalStream] = useState(null);
   const [remoteStream, setRemoteStream] = useState(null);
   const [callType, setCallType] = useState('video'); // 'video' or 'audio'
@@ -29,7 +29,7 @@ const CallComponent = ({ showMessage }) => {
   const hostPath = process.env.REACT_APP_API_BASE_URL_PEER;
 
 
-
+ 
 
 
   // utils/idGenerator.js
@@ -91,30 +91,30 @@ const CallComponent = ({ showMessage }) => {
 
   useEffect(() => {
     // Generate a human-readable ID
-      initializePhoneId();
-      // Cleanup on unmount
-      getUserPhoneNumber();
-      return () => {
-        if (localStream) {
-          localStream.getTracks().forEach(track => track.stop());
-        }
-        if (peerRef.current) {
-          peerRef.current.destroy();
-        }
-      };
-    
+    initializePhoneId();
+    // Cleanup on unmount
+    getUserPhoneNumber();
+    return () => {
+      if (localStream) {
+        localStream.getTracks().forEach(track => track.stop());
+      }
+      if (peerRef.current) {
+        peerRef.current.destroy();
+      }
+    };
+
   }, [callType]);
 
 
 
 
-  const initializePhoneId = async  () => {
-    const localPeerId  = await getUserPhoneNumber();
+  const initializePhoneId = async () => {
+    const localPeerId = await getUserPhoneNumber();
     //let localPeerId  = phoneNumber; 
     //debugger
-    console.log("id is ", localPeerId )
+    console.log("id is ", localPeerId)
     if (localPeerId) {
-      console.log("vedio id", localPeerId , "PORT", PORT);
+      console.log("vedio id", localPeerId, "PORT", PORT);
       // Initialize PeerJS
 
 
@@ -128,7 +128,7 @@ const CallComponent = ({ showMessage }) => {
         peerRef.current.destroy();
       }
 
-      peerRef.current = new Peer(localPeerId , {
+      peerRef.current = new Peer(localPeerId, {
         host: hostPath,
         //port: PORT,   // this only can use in localhost
         path: '/api/videocalls/userId',
@@ -136,9 +136,9 @@ const CallComponent = ({ showMessage }) => {
       });
       console.log('Peer object initialized:', peerRef.current);
       peerRef.current.on('open', (remoteId) => {
-       // setRemoteUserPhoneNumber(remoteId);
-       console.log('PeerJS connection opened:', peerRef.current);
-       console.log('PeerJS connection opened with ID:', remoteId);
+        // setRemoteUserPhoneNumber(remoteId);
+        console.log('PeerJS connection opened:', peerRef.current);
+        console.log('PeerJS connection opened with ID:', remoteId);
       });
       peerRef.current.on('error', (err) => {
         console.error('PeerJS encountered an error:', err);
@@ -167,8 +167,8 @@ const CallComponent = ({ showMessage }) => {
           showMessage('Error accessing media devices.');
         });
 
-      }
     }
+  }
 
   const callUser = () => {
 
@@ -193,26 +193,30 @@ const CallComponent = ({ showMessage }) => {
       if (!peerRef.current) {
         console.error("Peer reference is not initialized");
         return;
-    }
-    
-    if (!peerRef.current.open) {
+      }
+
+      if (!peerRef.current.open) {
         console.error("PeerJS connection is not open");
         return;
-    }
+      }
       const call = peerRef.current.call(remoteUserPhoneNumber, localStream);
-      console.log('Calling call user with Phone Number:', remoteUserPhoneNumber);
       setOngoingCall(call); // Set the ongoing call
 
-      call.on('stream', (stream) => {
+      call.on('stream', (stream) => {debugger
         console.log('Calling call on stream user with Phone Number:');
-        setRemoteStream(stream);
+
+        if (remoteVideoRef.current) {
+          remoteVideoRef.current.srcObject = stream;
+        }
+        //setRemoteStream(stream);
       });
       call.on('close', () => {
-        setRemoteStream(null); // Optionally clear remote stream when call ends
+       // setRemoteStream(null); // Optionally clear remote stream when call ends
         showMessage('Call ended by the other peer.');
       });
 
       peerRef.current.on('connection', (conn) => {debugger
+        debugger
         conn.on('data', (data) => {
           if (data.type === 'call-end') {
             endCall();
@@ -229,14 +233,14 @@ const CallComponent = ({ showMessage }) => {
     }
   };
   const endCall = () => {
- 
+
     if (ongoingCall) {
       // Send call-end message to the remote peer
       const conn = peerRef.current.connect(remoteUserPhoneNumber); // Create a connection to the remote peer
       conn.on('open', () => {
         conn.send({ type: 'call-end' });
       });
-  
+
       ongoingCall.close();
       setOngoingCall(null);
     }
@@ -245,7 +249,7 @@ const CallComponent = ({ showMessage }) => {
       peerRef.current.destroy();
     }
     setLocalStream(null);
-    setRemoteStream(null);
+    //setRemoteStream(null);
     showMessage('Call ended.');
 
   };
@@ -271,26 +275,28 @@ const CallComponent = ({ showMessage }) => {
     if (incomingCall) {
       incomingCallAudioRef.current.pause(); // Stop the incoming call sound
       incomingCallAudioRef.current.currentTime = 0; // Reset sound position
-      console.log("incomingCall in answer",incomingCall)
+      console.log("incomingCall in answer", incomingCall)
       incomingCall.answer(localStream);
-       // Debugging logs
-    console.log('Answering call with local stream:', localStream);
-    
-      incomingCall.on('stream', (stream) => {debugger
-        console.log('Received remote stream:', stream);
+      // Debugging logs
+      console.log('Answering call with local stream:', localStream);
+
+      incomingCall.on('stream', (stream) => {
+        debugger
+        console.log('Received localStream stream:', localStream, "Received remote stream",stream);
         if (remoteVideoRef.current) {
+          console.log('Assigning stream to remoteVideoRef');
           remoteVideoRef.current.srcObject = stream;
         }
-        setRemoteStream(stream);
+        
       });
 
       // Optional: Add error handling
-    incomingCall.on('error', (error) => {
-      console.error('Incoming call error:', error);
-      showMessage(`Incoming call error: ${error.message}`);
-    });
-       setIncomingCall(null); // Clear incoming call
-       setCallButtonsDisabled(true); // Disable the buttons after answering
+      incomingCall.on('error', (error) => {
+        console.error('Incoming call error:', error);
+        showMessage(`Incoming call error: ${error.message}`);
+      });
+      setIncomingCall(null); // Clear incoming call
+      setCallButtonsDisabled(true); // Disable the buttons after answering
     }
   };
 
@@ -301,7 +307,7 @@ const CallComponent = ({ showMessage }) => {
       incomingCall.close(); // Close the incoming call
       setIncomingCall(null); // Clear incoming call
       setCallButtonsDisabled(true); // Disable the buttons after answering
-      
+
     }
     else {
       showMessage('No incoming call to answer.');
@@ -317,7 +323,7 @@ const CallComponent = ({ showMessage }) => {
           {callType.charAt(0).toUpperCase() + callType.slice(1)} Call
         </h1>
         <div className="mb-3">
-           <div className="peer-id-container">
+          <div className="peer-id-container">
             <label className="form-label peer-id-label">Your ID:</label>
             <div className="peer-id-boxes">
               {phoneNumber}
@@ -399,15 +405,15 @@ const CallComponent = ({ showMessage }) => {
         {/* Incoming call action buttons */}
         {incomingCall && (
           <div className="d-flex justify-content-center mt-3">
-            <button className="btn btn-success me-2" 
-            onClick={answerCall}
-            disabled={callButtonsDisabled}
+            <button className="btn btn-success me-2"
+              onClick={answerCall}
+              disabled={callButtonsDisabled}
             >
               Answer
             </button>
-            <button className="btn btn-danger" 
-            onClick={rejectCall}
-            disabled={callButtonsDisabled}
+            <button className="btn btn-danger"
+              onClick={rejectCall}
+              disabled={callButtonsDisabled}
             >
               Reject
             </button>

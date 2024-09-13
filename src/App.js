@@ -1,13 +1,13 @@
 
 import './App.css';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
+import { HashRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import AddNotes from './components/AddNotes';
 import YourNotes from './components/YourNotes';
 import YourPlan from './components/YourPlans';
 import AddPlan from './components/AddPlan';
-import { useEffect, useState } from 'react';
+import {useState } from 'react';
 import AlertMessage from './components/AlertMessage'
 import Login from './components/auth/Login';
 import Signup from './components/auth/SignUp';
@@ -56,9 +56,6 @@ function App() {
       <Route path="/forgot-password" element={<ForgotPassword setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} />} />
       <Route path="/reset-password/:token" element={<ResetPassword setMessageType={setMessageType} showMessage={showMessage} setIsAuthenticated={setIsAuthenticated} />} />
       
-      {/* wildcard route
-      <Route path="*" element={<Navigate to={isAuthenticated ? "/home" : "/login"} />} /> 
-      */}
 
       {/* Default route should redirect to login if not authenticated */}
       <Route path="/Dailytracker" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
