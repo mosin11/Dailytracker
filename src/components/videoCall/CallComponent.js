@@ -46,6 +46,13 @@ const CallComponent = ({ phoneNumber,showMessage }) => {
 
         setCall(incomingCall);
       });
+      peer.on('connection', (conn) => {
+        conn.on('data', (data) => {
+          if (data === 'endCall') {
+            endCall();
+          }
+        });
+      });
     }
   }, [peer]);
 
