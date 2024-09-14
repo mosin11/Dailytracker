@@ -7,11 +7,11 @@
   export async function submitSignUp({ formData,setIsAuthenticated, showMessage, navigate, setMessageType }) {
     try {
   
-      console.log("formData",formData)
+    //  console.log("formData",formData)
       const BASE_URL = process.env.REACT_APP_API_BASE_URL;
     
       const { name, email, password, phoneNumber } = formData;
-      console.log("name, email, password, phoneNumber",name, email, password, phoneNumber)
+     // console.log("name, email, password, phoneNumber",name, email, password, phoneNumber)
 
 
       // Hash the password using bcrypt
@@ -26,14 +26,14 @@
         password :encreptPswd,
         phoneNumber
       });
-      console.log("response",response)
+     // console.log("response",response)
       navigate('/login');
       showMessage('Sign-up successful!');
       setMessageType('success');
       setIsAuthenticated(false);
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || 'Error occurred';
-      console.error('Error details:', error.response?.data);
+      //console.error('Error details:', error.response?.data);
       showMessage(`Error signing up: ${errorMessage}`);
       setMessageType('error');
       setIsAuthenticated(false);
@@ -55,16 +55,16 @@
         setMessageType('error');
         setIsAuthenticated(false);
       }
-      console.log("response.data.token",response.data.user.name)
+     // console.log("response.data.token",response.data.user.name)
       navigate('/home');
       showMessage('Login successful!');
       setMessageType('success');
-      setUserName(response.data.user.name);
+      setUserName(response.data.user);
       setIsAuthenticated(true);
       localStorage.setItem("authToken",response.data.token);
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || 'Error occurred';
-      console.error('Error details:', error.response?.data);
+     // console.error('Error details:', error.response?.data);
       showMessage(`Error Login: ${errorMessage}`);
       setMessageType('error');
       setIsAuthenticated(false);
@@ -82,7 +82,7 @@
       const response = await axios.post(url,{
         email
       });
-      console.log("response in emailVerifications ",response)
+      //console.log("response in emailVerifications ",response)
       showMessage('OTP sent successful!');
       setMessageType('success');
       setShowOtpForm(true)
@@ -91,7 +91,7 @@
       
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || 'Error occurred';
-      console.error('Error details:', error.response?.data);
+      //console.error('Error details:', error.response?.data);
       showMessage(`Error Login: ${errorMessage}`);
       setMessageType('error');
       setIsAuthenticated(false);
@@ -106,13 +106,13 @@
       const BASE_URL = process.env.REACT_APP_API_BASE_URL;
       const url = `${BASE_URL}/users/auth/verifyOtp`;
       
-      console.log("url",url)
+      //console.log("url",url)
   
       const response = await axios.post(url,{
         email, 
         otp
       });
-      console.log("response in OTPVerifications ",response)
+     // console.log("response in OTPVerifications ",response)
       showMessage('OTP verified successful!');
       setMessageType('success');
       setShowOtpForm(true)
@@ -121,7 +121,7 @@
       
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || 'Error occurred';
-      console.error('Error details:', error.response?.data);
+      //console.error('Error details:', error.response?.data);
       showMessage(`Error Login: ${errorMessage}`);
       setMessageType('error');
       setIsAuthenticated(false);
@@ -151,7 +151,7 @@
   
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || 'Error occurred';
-      console.error('Error details:', error.response?.data);
+     // console.error('Error details:', error.response?.data);
       localStorage.removeItem('authToken'); 
       showMessage(`Error signing up: ${errorMessage}`);
       setMessageType('error');

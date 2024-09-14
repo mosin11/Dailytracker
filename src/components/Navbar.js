@@ -7,6 +7,8 @@ import logo from './img/logo-512.jpeg';
 export default function Navbar({ setIsAuthenticated, userName }) {
   const navigate = useNavigate();
 
+  console.log("name",userName);
+
   const handleLogout = () => {
 
     localStorage.removeItem('authToken');
@@ -119,7 +121,7 @@ export default function Navbar({ setIsAuthenticated, userName }) {
             <button className="btn btn-outline-success" type="submit">Search</button>
           </form>
           <div className="ms-3 text-light">
-            Welcome, {userName}
+            Welcome, {userName.name}
           </div>
           <button
             className="btn btn-outline-light ms-2"

@@ -72,7 +72,7 @@ function App() {
       <Route path="/yourplan" element={<PrivateRoute element={<YourPlan setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
       <Route path="/getNotes" element={<PrivateRoute element={<YourNotes setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
       <Route path="/addPlan" element={<PrivateRoute element={<AddPlan setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
-      <Route path="/video-call" element={<PrivateRoute element={<CallComponent setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
+      <Route path="/video-call" element={<PrivateRoute element={<CallComponent phoneNumber={userName.phoneNumber} setMessageType={setMessageType} setIsAuthenticated={setIsAuthenticated} showMessage={showMessage} />} />} />
     </Routes>
   </Router>
   );
