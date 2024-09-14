@@ -105,6 +105,15 @@ const CallComponent = ({ phoneNumber,showMessage }) => {
       setRemoteStream(null);
       setLocalStream(null);
       setIsCallActive(false);
+      showMessage('Call ended.');
+
+      if (peer) {
+        const conn = peer.connect(remotePeerId);
+        conn.on('open', () => {
+          conn.send('endCall');
+        });
+      }
+
     }
   };
 
