@@ -13,23 +13,24 @@ const CallComponent = ({ phoneNumber,showMessage }) => {
   const [localStream, setLocalStream] = useState(null);
   const [incomingCall, setIncomingCall] = useState(false);
   const [isCallActive, setIsCallActive] = useState(false);
+  const [dataConnection, setDataConnection] = useState(null);
   const ringtoneAudio = useRef(new Audio(ringtone));
   const timeoutRef = useRef(null);
-  const [connection, setConnection] = useState(null);
 
   useEffect(() => {
-   
-      
     if (peer) {
-
       peer.on('open', () => {
         setPhoneNumber(peer.id); // Set the phone number (Peer ID) when peer connection opens
+      });
+      peer.on('data', (data) => {
+        if (data === 'endCall') {
+          setIsCallActive(false)
+        }
       });
 
       peer.on('call', (incomingCall) => {
         setIncomingCall(true);
         playRingtone();
-
         timeoutRef.current = setTimeout(() => {
           if (!isCallActive) {
             incomingCall.close();
@@ -47,16 +48,18 @@ const CallComponent = ({ phoneNumber,showMessage }) => {
 
         setCall(incomingCall);
       });
+
       peer.on('connection', (conn) => {
-        setConnection(conn);
         conn.on('data', (data) => {
           if (data === 'endCall') {
             endCall();
+            showMessage('The remote user ended the call.');
           }
         });
       });
+      
     }
-  }, [peer]);
+  }, [peer,isCallActive]);
 
   const playRingtone = () => {
     ringtoneAudio.current.loop = true;
@@ -78,6 +81,13 @@ const CallComponent = ({ phoneNumber,showMessage }) => {
             setRemoteStream(remoteStream);
             setIsCallActive(true);
           });
+
+           // Create or use an existing data connection
+        const conn = peer.connect(remotePeerId);
+        conn.on('open', () => {
+          setDataConnection(conn); // Set the data connection
+        });
+
           setCall(outgoingCall);
         });
     }
@@ -109,17 +119,15 @@ const CallComponent = ({ phoneNumber,showMessage }) => {
 
   const endCall = () => {
     if (call) {
+      if (dataConnection) {
+        dataConnection.send('endCall'); // Use dataConnection to send the message
+      }
       call.close();
       setCall(null);
       setRemoteStream(null);
       setLocalStream(null);
       setIsCallActive(false);
       showMessage('Call ended.');
-debugger
-      if (connection) {
-        connection.send('endCall');
-      }
-
     }
   };
 
