@@ -15,6 +15,7 @@ const CallComponent = ({ phoneNumber,showMessage }) => {
   const [isCallActive, setIsCallActive] = useState(false);
   const ringtoneAudio = useRef(new Audio(ringtone));
   const timeoutRef = useRef(null);
+  const [connection, setConnection] = useState(null);
 
   useEffect(() => {
    
@@ -47,6 +48,7 @@ const CallComponent = ({ phoneNumber,showMessage }) => {
         setCall(incomingCall);
       });
       peer.on('connection', (conn) => {
+        setConnection(conn);
         conn.on('data', (data) => {
           if (data === 'endCall') {
             endCall();
@@ -113,12 +115,9 @@ const CallComponent = ({ phoneNumber,showMessage }) => {
       setLocalStream(null);
       setIsCallActive(false);
       showMessage('Call ended.');
-
-      if (peer) {
-        const conn = peer.connect(remotePeerId);
-        conn.on('open', () => {
-          conn.send('endCall');
-        });
+debugger
+      if (connection) {
+        connection.send('endCall');
       }
 
     }

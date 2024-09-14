@@ -7,7 +7,7 @@ import logo from './img/logo-512.jpeg';
 export default function Navbar({ setIsAuthenticated, userName }) {
   const navigate = useNavigate();
 
-  console.log("name",userName);
+ // console.log("name",userName);
 
   const handleLogout = () => {
 
