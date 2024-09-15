@@ -15,3 +15,13 @@
 .main-content {
   padding-top: 56px; /* Adjust this value based on your navbar height */
 }
+
+/* .dropdown:hover .dropdown-menu {
+  display: block;
+  background-color: #7237a3;
+  position: absolute;
+  left: 0;
+} */
+#userDropdown {
+  text-transform: capitalize; /* Capitalizes the first letter of each word */
+}

@@ -3,15 +3,16 @@ import NoteItem from './NoteItem'
 import axios from 'axios';
 import './css/AddNotes.css'; // Import your CSS file
 import EditNoteModal from './EditNoteModal';
+import { useAlert } from '../contexts/AlertContext';
 
-export default function YourNotes({ showMessage,setIsAuthenticated }) {
+export default function YourNotes({setIsAuthenticated }) {
 
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const token = localStorage.getItem('authToken');
   const [notes, setNotes] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingNote, setEditingNote] = useState(null); // State to hold the note being edited
-
+  const { showMessage } = useAlert();
 
 
   const handleUpdateNote = async (updatedNote) => {
@@ -32,9 +33,9 @@ export default function YourNotes({ showMessage,setIsAuthenticated }) {
       setEditingNote(null);
 
       fetchNotes();
-      showMessage('Note updated successfully!');
+      showMessage('Note updated successfully!',"success");
     } catch (error) {
-      showMessage('Error updating note: ' + error.message);
+      showMessage('Error updating note: ' + error.message,'error');
     }
   };
   const fetchNotes = async () => {
@@ -71,9 +72,9 @@ export default function YourNotes({ showMessage,setIsAuthenticated }) {
         }
       });
       fetchNotes();
-      showMessage('Note deleted successfully!');
+      showMessage('Note deleted successfully!','delete');
     } catch (error) {
-      showMessage('Error deleting note: ' + error.message);
+      showMessage('Error deleting note: ' + error.message,'error');
     }
   };
   const editNotes = async (id) => {

@@ -1,38 +1,39 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useAlert } from '../../contexts/AlertContext';
 
-const ForgotPassword = ({ setMessageType, showMessage }) => {
+const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const navigate = useNavigate();
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+  const { showMessage } = useAlert();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email) {
-      showMessage('Email is required');
-      setMessageType('error');
+      showMessage('Email is required',"error");
+      
       return;
     }
 
     try {
       // Replace '/api/users/forgot-password' with the actual endpoint of your backend
       const response = await axios.post(`${BASE_URL}/users/forgot-password`, { email });
-debugger
       if (response.status === 200) {
-        showMessage('Password reset link has been sent to your email');
-        setMessageType('success');
+        showMessage('Password reset link has been sent to your email',"success");
+      
         setTimeout(() => {
           navigate('/login');
         }, 4000);
       } else {
-        showMessage(response.data.message || 'Failed to send reset link');
-        setMessageType('error');
+        showMessage(response.data.message || 'Failed to send reset link',"error");
+     
       }
     } catch (error) {
       console.error('Error during password reset request:', error);
-      showMessage('An error occurred while sending the reset link');
-      setMessageType('error');
+      showMessage('An error occurred while sending the reset link',"error");
+     
     }
   };
 

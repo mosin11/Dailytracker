@@ -3,10 +3,12 @@ import usePeer from './usePeer'; // Import the usePeer hook
 import '../css/videocall.css';
 import ringtone from './Incoming_Call.mp3';
 
-const CallComponent = ({ phoneNumber,showMessage }) => {
+const CallComponent = ({showMessage }) => {
+  const userObject = sessionStorage.getItem("user"); 
+  const user =JSON.parse(userObject);
   const [userPhoneNumber, setPhoneNumber] = useState('');
-  console.log("phoneNumber",phoneNumber)
-  const { peer, peerId: myPeerId } = usePeer(phoneNumber); // Get peer and peerId from usePeer
+  console.log("phoneNumber",user.phoneNumber)
+  const { peer, peerId: myPeerId } = usePeer(user.phoneNumber); // Get peer and peerId from usePeer
   const [remotePeerId, setRemotePeerId] = useState('');
   const [call, setCall] = useState(null);
   const [remoteStream, setRemoteStream] = useState(null);
@@ -16,7 +18,7 @@ const CallComponent = ({ phoneNumber,showMessage }) => {
   const [dataConnection, setDataConnection] = useState(null);
   const ringtoneAudio = useRef(new Audio(ringtone));
   const timeoutRef = useRef(null);
-
+  
   useEffect(() => {
     if (peer) {
       peer.on('open', () => {
@@ -144,7 +146,7 @@ const CallComponent = ({ phoneNumber,showMessage }) => {
           Video Call Interface
         </h1>
         <div className="col-12 my-4 text-center">
-          <h4>Your Phone Number (Peer ID): {userPhoneNumber}</h4>
+          <h4>Your Phone Number (Peer ID): {userPhoneNumber || user.phoneNumber}</h4>
         </div>
 
         {/* Input Section for Peer ID */}

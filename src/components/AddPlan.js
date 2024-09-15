@@ -3,11 +3,12 @@ import axios from 'axios';
 import './css/AddNotes.css'; // Import the same CSS file
 import EditPlanModal from './EditPlanModal';
 import PlanItem from './PlanItem ';
+import { useAlert } from '../contexts/AlertContext';
 
-export default function AddPlan({ setMessageType, showMessage, setIsAuthenticated }) {
+export default function AddPlan({setIsAuthenticated }) {
     const BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const token = localStorage.getItem('authToken');
-
+    const { showMessage } = useAlert();
     const [title, setTitle] = useState('');
     const [desc, setDesc] = useState('');
     const [category, setCategory] = useState('-1');
@@ -31,13 +32,13 @@ export default function AddPlan({ setMessageType, showMessage, setIsAuthenticate
             setDesc('');
             setCategory('-1');
             fetchPlans();
-            showMessage('Plan added successfully!');
-            setMessageType('success');
+            showMessage('Plan added successfully!','success');
+            
         } catch (error) {
             setIsAuthenticated(false);
             localStorage.removeItem('authToken');
-            showMessage('Error adding plan: ' + error.message);
-            setMessageType('error');
+            showMessage('Error adding plan: ' + error.message,'error');
+           
         }
     };
 
@@ -45,8 +46,8 @@ export default function AddPlan({ setMessageType, showMessage, setIsAuthenticate
         setTitle('');
         setDesc('');
         setCategory('-1');
-        showMessage('Form cleared!');
-        setMessageType('success');
+        showMessage('Form cleared!','success');
+        
     };
 
     const fetchPlans = async () => {
@@ -101,13 +102,13 @@ export default function AddPlan({ setMessageType, showMessage, setIsAuthenticate
             setCategory('-1');
             setShowModal(false);
             fetchPlans();
-            showMessage('Plan updated successfully!');
-            setMessageType('update');
+            showMessage('Plan updated successfully!',"update");
+           
         } catch (error) {
             setIsAuthenticated(false);
             localStorage.removeItem('authToken');
-            showMessage('Error updating plan: ' + error.message);
-            setMessageType('error');
+            showMessage('Error updating plan: ' + error.message,'error');
+            
         }
     };
 
@@ -120,13 +121,13 @@ export default function AddPlan({ setMessageType, showMessage, setIsAuthenticate
                 }
             });
             fetchPlans();
-            showMessage('Plan deleted successfully!');
-            setMessageType('delete');
+            showMessage('Plan deleted successfully!','delete');
+            
         } catch (error) {
             setIsAuthenticated(false);
             localStorage.removeItem('authToken');
-            showMessage('Error deleting plan: ' + error.message);
-            setMessageType('error');
+            showMessage('Error deleting plan: ' + error.message,'error');
+           
         }
     };
 

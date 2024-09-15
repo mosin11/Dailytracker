@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/Auth.css';
 import {submitSignUp,emailVerifications,OTPVerifications} from './Auth'
+import { useAlert } from '../../contexts/AlertContext';
 
 
 
 
-const Signup = ({ setMessageType, showMessage,setIsAuthenticated }) => {
+const Signup = ({setIsAuthenticated }) => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -14,7 +15,7 @@ const Signup = ({ setMessageType, showMessage,setIsAuthenticated }) => {
         confirmPassword: '',
         phoneNumber: '',
     });
-
+    const { showMessage } = useAlert();
     const [errors, setErrors] = useState({});
     const [passwordStrength, setPasswordStrength] = useState('');
     const [showOtpForm, setShowOtpForm] = useState(false);
@@ -55,8 +56,6 @@ const Signup = ({ setMessageType, showMessage,setIsAuthenticated }) => {
 
             }
         }
-
-
     };
 
     const handleFocus = () => {
@@ -88,11 +87,10 @@ const Signup = ({ setMessageType, showMessage,setIsAuthenticated }) => {
         };
     };
 
-
     const handleOtpSubmit = async () => {
         try {
             const email =formData.email;
-            const isValided = await emailVerifications({email,setShowOtpForm,showMessage,setIsAuthenticated,setMessageType});     
+            const isValided = await emailVerifications({email,setShowOtpForm,showMessage,setIsAuthenticated});     
            return isValided.status;
         } catch (error) {
             showMessage(error.response.data.error);
@@ -112,11 +110,10 @@ const Signup = ({ setMessageType, showMessage,setIsAuthenticated }) => {
     }
     const handleOTPVerification = async ()=>{
         let email =formData.email;
-        const verifyResponce =await OTPVerifications({email,otp,setShowOtpForm,setIsAuthenticated,showMessage, setMessageType });
-       debugger
+        const verifyResponce =await OTPVerifications({email,otp,setShowOtpForm,setIsAuthenticated,showMessage });
         if(verifyResponce.status ===200){
             console.log("otp verify Responce",verifyResponce)
-            await submitSignUp({formData ,showMessage,navigate,setIsAuthenticated,setMessageType});   
+            await submitSignUp({formData ,showMessage,navigate,setIsAuthenticated});   
             setShowOtpForm(false);
         }
               
@@ -146,8 +143,7 @@ const Signup = ({ setMessageType, showMessage,setIsAuthenticated }) => {
             console.log("otp status is ",otpStatusCode)
         } else {
             setErrors(newErrors);
-            showMessage(newErrors);
-            setMessageType('error');
+            showMessage(newErrors,'error');
             setOtpError('');
             setShowOtpForm(false);
            // setOtpSent(false);

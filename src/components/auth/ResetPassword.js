@@ -1,27 +1,29 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { useAlert } from '../../contexts/AlertContext';
 
-const ResetPassword = ({ setMessageType, showMessage }) => {
+const ResetPassword = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { token } = useParams(); // Get token from URL params
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+  const { showMessage } = useAlert();
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
 
     if (!password || !confirmPassword) {
-      showMessage('All fields are required');
-      setMessageType('error');
+      showMessage('All fields are required',"error");
+      
       return;
     }
 
     if (password !== confirmPassword) {
-      showMessage('Passwords do not match');
-      setMessageType('error');
+      showMessage('Passwords do not match',"error");
+      
       return;
     }
 
@@ -29,18 +31,18 @@ const ResetPassword = ({ setMessageType, showMessage }) => {
       setIsLoading(true);
       const response = await axios.post(`${BASE_URL}/users/reset-password/${token}`, { password });
       if (response.status === 200) {
-        showMessage('Password has been reset successfully');
-        setMessageType('success');
+        showMessage('Password has been reset successfully',"success");
+        
         setTimeout(() => {
           navigate('/login');
         }, 4000);
       } else {
-        showMessage(response.data.message || 'Failed to reset password');
-        setMessageType('error');
+        showMessage(response.data.message || 'Failed to reset password',"error");
+        
       }
     } catch (error) {
-      showMessage('An error occurred while resetting your password');
-      setMessageType('error');
+      showMessage('An error occurred while resetting your password','error');
+ 
       console.error('Reset password error:', error);
     } finally {
       setIsLoading(false);

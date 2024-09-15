@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './css/AddNotes.css'; // Import your CSS file
+import './css/AddNotes.css'; 
 import PlanItem from './PlanItem '; 
-import EditPlanModal from './EditPlanModal'; // Assuming you have an EditPlanModal component
+import EditPlanModal from './EditPlanModal'; 
+import { useAlert } from '../contexts/AlertContext';
 
-export default function YourPlans({ showMessage, setIsAuthenticated }) {
+export default function YourPlans({  setIsAuthenticated }) {
 
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const token = localStorage.getItem('authToken');
   const [plans, setPlans] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [editingPlan, setEditingPlan] = useState(null); // State to hold the plan being edited
-
+  const [editingPlan, setEditingPlan] = useState(null); 
+  const { showMessage } = useAlert();
   const fetchPlans = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/plans/getAllPlans`, {
@@ -46,9 +47,9 @@ export default function YourPlans({ showMessage, setIsAuthenticated }) {
         }
       });
       fetchPlans();
-      showMessage('Plan deleted successfully!');
+      showMessage('Plan deleted successfully!','success');
     } catch (error) {
-      showMessage('Error deleting plan: ' + error.message);
+      showMessage('Error deleting plan: ' + error.message,'error');
     }
   };
 
@@ -75,9 +76,9 @@ export default function YourPlans({ showMessage, setIsAuthenticated }) {
       });
       setEditingPlan(null);
       fetchPlans();
-      showMessage('Plan updated successfully!');
+      showMessage('Plan updated successfully!','update');
     } catch (error) {
-      showMessage('Error updating plan: ' + error.message);
+      showMessage('Error updating plan: ' + error.message,'error');
     }
   };
 

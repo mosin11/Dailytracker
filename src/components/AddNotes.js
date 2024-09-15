@@ -3,10 +3,12 @@ import './css/AddNotes.css'; // Import your CSS file
 import axios from 'axios';
 import NoteItem from './NoteItem';
 import EditNoteModal from './EditNoteModal';
+import { useAlert } from '../contexts/AlertContext';
 
-export default function AddNotes({ setMessageType,showMessage,setIsAuthenticated }) {
+export default function AddNotes({setIsAuthenticated }) {
     // State for adding a new note
     const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+    const { showMessage } = useAlert();
     const token = localStorage.getItem('authToken');
     const [addTitle, setAddTitle] = useState('');
     const [addDesc, setAddDesc] = useState('');
@@ -39,13 +41,13 @@ export default function AddNotes({ setMessageType,showMessage,setIsAuthenticated
             setAddDesc('');
             setAddCategory('-1');
             fetchNotes();           
-            showMessage('Notes added successfully!');
-            setMessageType('success');
+            showMessage('Notes added successfully!',"success");
+            
         } catch (error) {
             setIsAuthenticated(false);
             localStorage.removeItem("authToken")
-            showMessage('Error adding notes: ' + error.message);            
-            setMessageType('Error');
+            showMessage('Error adding notes: ' + error.message,"Error");            
+            
         }
     };
 
@@ -54,8 +56,8 @@ export default function AddNotes({ setMessageType,showMessage,setIsAuthenticated
         setAddTitle('');
         setAddDesc('');
         setAddCategory('-1');
-        showMessage('Form cleared!');        
-        setMessageType('success');
+        showMessage('Form cleared!',"success");        
+        
     };
 
     // Function to fetch all notes
@@ -120,13 +122,13 @@ export default function AddNotes({ setMessageType,showMessage,setIsAuthenticated
             setEditCategory('-1');
             setShowModal(false);
             fetchNotes();
-            showMessage('Note updated successfully!');          
-            setMessageType('update');
+            showMessage('Note updated successfully!',"update");          
+            
         } catch (error) {
             setIsAuthenticated(false);
             localStorage.removeItem("authToken")
-            showMessage('Error updating note: ' + error.message);                    
-            setMessageType('error');
+            showMessage('Error updating note: ' + error.message,"error");                    
+            
         }
     };
 
@@ -140,13 +142,13 @@ export default function AddNotes({ setMessageType,showMessage,setIsAuthenticated
                 }
             });
             fetchNotes();
-            showMessage('Note deleted successfully!');           
-            setMessageType('delete');
+            showMessage('Note deleted successfully!',"delete");           
+            
         } catch (error) {
             setIsAuthenticated(false);
             localStorage.removeItem("authToken")
-            showMessage('Error deleting note: ' + error.message);                     
-            setMessageType('error');
+            showMessage('Error deleting note: ' + error.message,"error");                     
+            
         }
     };
 

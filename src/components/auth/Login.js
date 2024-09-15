@@ -2,25 +2,27 @@
 import React, { useState ,useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { submitLogin, authToken } from './Auth'
+import { useAlert } from '../../contexts/AlertContext';
 
 
-const Login = ({ setMessageType, showMessage, setUserName,setIsAuthenticated }) => {
+const Login = ({setUserName,setIsAuthenticated }) => {
       const [email, setEmail] = useState('');
       const [password, setPassword] = useState('');
       const [showPassword, setShowPassword] = useState(false);
       const [error, setError] = useState('');
       const navigate = useNavigate();
       const token = localStorage.getItem('authToken');
+      const { showMessage } = useAlert();
 
       const handleSubmit = async (e) => {
         e.preventDefault();
         if (!email || !password) {
-          showMessage('Both fields are required');
-          setMessageType('error')
+          showMessage('Both fields are required',"error");
+          
           return;
         }
 
-       await submitLogin({ showMessage, setUserName,setIsAuthenticated, setMessageType, email, navigate, password });
+       await submitLogin({ showMessage, setUserName,setIsAuthenticated, email, navigate, password });
   
       };
 
@@ -48,14 +50,14 @@ const Login = ({ setMessageType, showMessage, setUserName,setIsAuthenticated }) 
       if (token && token !== null) {
         const loginData = {
           token,
-          setMessageType,
            showMessage,
+           setUserName,
            setIsAuthenticated
         };
   
         try {
           const data = await authToken(loginData);
-          
+  
           // Assuming `authToken` returns a userId or some form of validation result
           if (data.userId && !data.isVerified) {
             navigate('/home');

@@ -4,7 +4,7 @@ import './css/Navbar.css';
 import logo from './img/logo-512.jpeg';
 
 
-export default function Navbar({ setIsAuthenticated, userName }) {
+const Navbar = React.memo(({ setIsAuthenticated, userName, lastLogin }) => {
   const navigate = useNavigate();
 
  // console.log("name",userName);
@@ -20,24 +20,18 @@ export default function Navbar({ setIsAuthenticated, userName }) {
 
    // This useEffect hook adds the event listener to handle link clicks in mobile view
    useEffect(() => {
+    console.log("in navbar userName",userName)
     const handleNavLinkClick = () => {
       const navbarToggler = document.querySelector('.navbar-toggler');
       const navbarCollapse = document.querySelector('.navbar-collapse');
-
-      // Check if the navbar-toggler button is visible (mobile view)
       if (navbarToggler && window.getComputedStyle(navbarToggler).display !== 'none') {
-        // If the navbar is expanded, collapse it
         if (navbarCollapse && navbarCollapse.classList.contains('show')) {
-          navbarToggler.click(); // Manually trigger the collapse
+          navbarToggler.click();
         }
       }
     };
-
-    // Add event listener to all navbar links
     const navLinks = document.querySelectorAll('.nav-link');
     navLinks.forEach(link => link.addEventListener('click', handleNavLinkClick));
-
-    // Clean up the event listeners on component unmount
     return () => {
       navLinks.forEach(link => link.removeEventListener('click', handleNavLinkClick));
     };
@@ -120,18 +114,38 @@ export default function Navbar({ setIsAuthenticated, userName }) {
             <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
             <button className="btn btn-outline-success" type="submit">Search</button>
           </form>
-          <div className="ms-3 text-light">
-            Welcome, {userName.name}
+          <div className="ms-3 dropdown text-light">
+            <button
+              className="btn btn-outline-light dropdown-toggle"
+              id="userDropdown"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Welcome, {userName}
+            </button>
+            <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><span className="dropdown-item-text"><strong>Last Login:</strong> {lastLogin}</span></li>
+              <li><hr className="dropdown-divider" /></li>
+              <li>
+                <NavLink className="dropdown-item" to="/profile">
+                  <i className="bi bi-person"></i> Profile
+                </NavLink>
+              </li>
+              <li>
+                <NavLink className="dropdown-item" to="/password-management">
+                  <i className="bi bi-lock"></i> Password Management
+                </NavLink>
+              </li>
+              <li>
+                <button className="dropdown-item" onClick={handleLogout}>
+                  <i className="bi bi-box-arrow-right"></i> Logout
+                </button>
+              </li>
+            </ul>
           </div>
-          <button
-            className="btn btn-outline-light ms-2"
-            onClick={handleLogout}
-            aria-label="Logout"
-          >
-            <i className="bi bi-box-arrow-right"></i>
-          </button>
         </div>
       </div>
     </nav>
   );
-}
+});
+export default Navbar;
