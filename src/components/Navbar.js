@@ -35,7 +35,7 @@ const Navbar = React.memo(({ setIsAuthenticated, userName, lastLogin }) => {
     return () => {
       navLinks.forEach(link => link.removeEventListener('click', handleNavLinkClick));
     };
-  }, []);
+  }, [userName]);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
