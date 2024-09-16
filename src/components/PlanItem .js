@@ -107,7 +107,7 @@ const PlanItem = ({ title, description, date, tag, deletePlan, editPlan }) => {
               className="mt-2"
               style={{ alignSelf: 'flex-start', textDecoration: 'none' }}
             >
-              {showFullText ? 'Show More' : 'Show Less'}
+              {showFullText ? 'Show Less' : 'Show More'}
             </a>
           )}
           <div className="position-absolute top-0 end-0 p-2">
