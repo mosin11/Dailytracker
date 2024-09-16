@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const NoteItem = ({ title, description, date, tag,deleteNotes,editNotes }) => {
+const NoteItem = ({ title, description, date, tag, deleteNotes, editNotes }) => {
   // Format date to a more readable format
   const formattedDate = new Date(date).toLocaleDateString('en-US', {
     year: 'numeric',
@@ -68,20 +68,20 @@ const NoteItem = ({ title, description, date, tag,deleteNotes,editNotes }) => {
           <p
             className="card-text flex-grow-1"
             style={{
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                display: '-webkit-box',
-                WebkitBoxOrient: 'vertical',
-                
-                whiteSpace: showFullText ? 'normal' : 'nowrap',
-                transition: 'max-height 0.3s ease',
-              }}
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+
+              whiteSpace: showFullText ? 'normal' : 'nowrap',
+              transition: 'max-height 0.3s ease',
+            }}
           >
             {description}
           </p>
           {description.length > 50 && (
             <a
-            href="."
+              href="."
               onClick={toggleText}
               className="mt-2 "
               style={{ alignSelf: 'flex-start', textDecoration: 'none' }}
@@ -89,25 +89,34 @@ const NoteItem = ({ title, description, date, tag,deleteNotes,editNotes }) => {
               {showFullText ? 'Show More' : 'Show Less'}
             </a>
           )}
-           <div className="position-absolute top-0 end-0 p-2">
+          <div className="position-absolute top-0 end-0 p-2">
+            <span
+              onClick={editNotes}
+              className="badge bg-primary text-white rounded-circle p-2"
+              style={{ cursor: 'pointer', marginRight: '5px' }}
+              title="Edit"
+            >
+              <i className="bi bi-pencil"></i>
+            </span>
+            <span
+              onClick={deleteNotes}
+              className="badge bg-danger text-white rounded-circle p-2"
+              style={{ cursor: 'pointer' }}
+              title="Delete"
+            >
+              <i className="bi bi-trash"></i>
+            </span>
+
+          </div>
           <span
-            onClick={editNotes}
-            className="badge bg-primary text-white rounded-circle p-2"
-            style={{ cursor: 'pointer', marginRight: '5px' }}
-            title="Edit"
+            className="position-absolute top-0 start-20 translate-middle badge rounded-pill bg-danger"
+            style={{ transform: 'translate(-50%, -50%)' }}
           >
-            <i className="bi bi-pencil"></i>
-          </span>
-          <span
-            onClick={deleteNotes}
-            className="badge bg-danger text-white rounded-circle p-2"
-            style={{ cursor: 'pointer' }}
-            title="Delete"
-          >
-            <i className="bi bi-trash"></i>
+            {tag}
+            <span className="visually-hidden">unread messages</span>
           </span>
         </div>
-        </div>
+
       </div>
     </div>
   );

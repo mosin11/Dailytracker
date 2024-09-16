@@ -70,7 +70,8 @@ export default function AddNotes({setIsAuthenticated }) {
                     'Content-Type': 'application/json',
                 }
             });
-            if (Array.isArray(response.data)) {           
+            if (Array.isArray(response.data)) {  
+                console.log("response notes",response)         
                 setNotes(response.data);
             } else {
                 console.error('Unexpected response data format:', response.data);

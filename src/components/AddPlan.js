@@ -207,7 +207,7 @@ export default function AddPlan({setIsAuthenticated }) {
                 <PlanItem
                     title={plan.title || "Unknown"}
                     description={plan.description || ''}
-                    category={plan.category}
+                    tag={plan.category}
                     date={plan.date}
                     deletePlan={() => handleDeletePlan(plan._id)}
                     editPlan={() => handleEditPlan(plan._id)}

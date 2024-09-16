@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import moment from 'moment'; 
+
 
 const PlanItem = ({ title, description, date, tag, deletePlan, editPlan }) => {
   // Format date to a more readable format
@@ -26,17 +26,17 @@ const PlanItem = ({ title, description, date, tag, deletePlan, editPlan }) => {
 
   const formatTimeAgo = (date) => {
     const now = new Date();
-  const postDate = new Date(date);
-  const diff = now - postDate; // Difference in milliseconds
+    const postDate = new Date(date);
+    const diff = now - postDate; // Difference in milliseconds
 
-  const minutes = Math.floor(diff / (1000 * 60));
-  const hours = Math.floor(diff / (1000 * 60 * 60));
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const minutes = Math.floor(diff / (1000 * 60));
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-  if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
-  if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-  if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-  return 'Just now';
+    if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
+    if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    return 'Just now';
   };
 
   return (
@@ -45,22 +45,22 @@ const PlanItem = ({ title, description, date, tag, deletePlan, editPlan }) => {
         className="card h-100"
         style={{ background: 'linear-gradient(to bottom, #19f5ea, #feb47b)' }}
       ><div>
-        
-        <h5
-          className="card-header"
-          style={{
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          {title}
-        </h5>
-        <blockquote className="blockquote mb-0">
-          <p className="mb-0">{formattedDate}</p>
-        </blockquote>
-      </div>
-        
+
+          <h5
+            className="card-header"
+            style={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {title}
+          </h5>
+          <blockquote className="blockquote mb-0">
+            <p className="mb-0">{formattedDate}</p>
+          </blockquote>
+        </div>
+
         <div
           className="card-body d-flex flex-column"
           style={{ background: 'linear-gradient(to bottom, #19f5ea, #feb47b)' }}
@@ -130,8 +130,16 @@ const PlanItem = ({ title, description, date, tag, deletePlan, editPlan }) => {
           </div>
         </div>
         <div className="card-footer text-muted d-flex justify-content-between align-items-center">
-        <span>{formatTimeAgo(date)}</span>
+          <span>{formatTimeAgo(date)}</span>
+          <span
+            className="position-absolute top-0 start-20 translate-middle badge rounded-pill bg-danger"
+            style={{ transform: 'translate(-50%, -50%)' }}
+          >
+            {tag}
+            <span className="visually-hidden">unread messages</span>
+          </span>
         </div>
+
       </div>
     </div>
   );
