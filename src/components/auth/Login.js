@@ -59,7 +59,7 @@ const Login = ({setUserName,setIsAuthenticated }) => {
           const data = await authToken(loginData);
   
           // Assuming `authToken` returns a userId or some form of validation result
-          if (data.userId && !data.isVerified) {
+          if (data.userId && data.isVerified) {
             navigate('/home');
             setIsAuthenticated(true);
             setUserName(data.userName);
