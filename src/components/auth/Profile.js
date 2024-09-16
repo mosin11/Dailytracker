@@ -157,7 +157,7 @@ export default function Profile({  setIsAuthenticated, setUserName }) {
                                 type="button"
                                 onClick={handleSendOtp}
                                 className="btn btn-primary mx-3">
-                                Send OTP
+                                submit
                             </button>
                         ) : (
                             <div className="mb-3">
